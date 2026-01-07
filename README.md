@@ -10,114 +10,114 @@ All mayor Operating Systems (Windows, Linux, MacOS) are supported.
 
 ## Roadmap
 
-- [] Core Functionality
-    - [] Environment Variable Resolution
-        - [] Linux
-            - [] User Space
-                - [] Home
-                - [] Cache
-                - [] Config
-                - [] Local
-                    - [] Data
-                    - [] State
-                    - [] Bin
-                - [] Audio
-                - [] Desktop
-                - [] Document
-                - [] Download
-                - [] Font
-                - [] Picture
-                - [] Public
-                - [] Template
-                - [] Video
-            - [] Project Space
-                - [] Cache
-                - [] Config
-                - [] Local
-                    - [] Data
-                    - [] Config
-                - [] Data
-                - [] Preference
-                - [] Runtime
-                - [] State
-        - [] Windows
-            - [] User Space
-                - [] Home
-                - [] Cache
-                - [] Config
-                - [] Local
-                    - [] Data
-                    - [] State
-                    - [] Bin
-                - [] Audio
-                - [] Desktop
-                - [] Document
-                - [] Download
-                - [] Font
-                - [] Picture
-                - [] Public
-                - [] Template
-                - [] Video
-            - [] Project Space
-                - [] Cache
-                - [] Config
-                - [] Local
-                    - [] Data
-                    - [] Config
-                - [] Data
-                - [] Preference
-                - [] Runtime
-                - [] State
-        - [] MacOS
-            - [] User Space
-                - [] Home
-                - [] Cache
-                - [] Config
-                - [] Local
-                    - [] Data
-                    - [] State
-                    - [] Bin
-                - [] Audio
-                - [] Desktop
-                - [] Document
-                - [] Download
-                - [] Font
-                - [] Picture
-                - [] Public
-                - [] Template
-                - [] Video
-            - [] Project Space
-                - [] Cache
-                - [] Config
-                - [] Local
-                    - [] Data
-                    - [] Config
-                - [] Data
-                - [] Preference
-                - [] Runtime
-                - [] State
-    - [] Platform-Specific "Hide" Implementation
-        - [] Windows
-        - [] Linux
-        - [] MacOS
-- [] Stable Features
-    - [] Atomic "Hide-and-Move"
-    - [] The "Double-Search" Discovery
-    - [] Ownership & Permissions (Unix-only)
-- [] Nice-to-Haves
-    - [] MacOS Hybrid Support
-    - [] Windows "System" Flag
-    - [] Redaction/Privacy Helpers
-    - [] Directory "Auto-Creator"
-    - [] Directory "Auto-Deleter"
-    - [] Path "Normalizer"
-- [] Support system level directories (maybe - after 1.0.0)
-    - [] Windows
-        - [] ProgramFiles
-    - [] Unix
-        - [] Root Bin
-        - [] Root Data
-        - [] Root Config
+- [ ] Core Functionality
+    - [ ] Environment Variable Resolution
+        - [ ] Linux
+            - [ ] User Space
+                - [ ] Home
+                - [ ] Cache
+                - [ ] Config
+                - [ ] Local
+                    - [ ] Data
+                    - [ ] State
+                    - [ ] Bin
+                - [ ] Audio
+                - [ ] Desktop
+                - [ ] Document
+                - [ ] Download
+                - [ ] Font
+                - [ ] Picture
+                - [ ] Public
+                - [ ] Template
+                - [ ] Video
+            - [ ] Project Space
+                - [ ] Cache
+                - [ ] Config
+                - [ ] Local
+                    - [ ] Data
+                    - [ ] Config
+                - [ ] Data
+                - [ ] Preference
+                - [ ] Runtime
+                - [ ] State
+        - [ ] Windows
+            - [ ] User Space
+                - [ ] Home
+                - [ ] Cache
+                - [ ] Config
+                - [ ] Local
+                    - [ ] Data
+                    - [ ] State
+                    - [ ] Bin
+                - [ ] Audio
+                - [ ] Desktop
+                - [ ] Document
+                - [ ] Download
+                - [ ] Font
+                - [ ] Picture
+                - [ ] Public
+                - [ ] Template
+                - [ ] Video
+            - [ ] Project Space
+                - [ ] Cache
+                - [ ] Config
+                - [ ] Local
+                    - [ ] Data
+                    - [ ] Config
+                - [ ] Data
+                - [ ] Preference
+                - [ ] Runtime
+                - [ ] State
+        - [ ] MacOS
+            - [ ] User Space
+                - [ ] Home
+                - [ ] Cache
+                - [ ] Config
+                - [ ] Local
+                    - [ ] Data
+                    - [ ] State
+                    - [ ] Bin
+                - [ ] Audio
+                - [ ] Desktop
+                - [ ] Document
+                - [ ] Download
+                - [ ] Font
+                - [ ] Picture
+                - [ ] Public
+                - [ ] Template
+                - [ ] Video
+            - [ ] Project Space
+                - [ ] Cache
+                - [ ] Config
+                - [ ] Local
+                    - [ ] Data
+                    - [ ] Config
+                - [ ] Data
+                - [ ] Preference
+                - [ ] Runtime
+                - [ ] State
+    - [ ] Platform-Specific "Hide" Implementation
+        - [ ] Windows
+        - [ ] Linux
+        - [ ] MacOS
+- [ ] Stable Features
+    - [ ] Atomic "Hide-and-Move"
+    - [ ] The "Double-Search" Discovery
+    - [ ] Ownership & Permissions (Unix-only)
+- [ ] Nice-to-Haves
+    - [ ] MacOS Hybrid Support
+    - [ ] Windows "System" Flag
+    - [ ] Redaction/Privacy Helpers
+    - [ ] Directory "Auto-Creator"
+    - [ ] Directory "Auto-Deleter"
+    - [ ] Path "Normalizer"
+- [ ] Support system level directories (maybe - after 1.0.0)
+    - [ ] Windows
+        - [ ] ProgramFiles
+    - [ ] Unix
+        - [ ] Root Bin
+        - [ ] Root Data
+        - [ ] Root Config
 
 ## Project Design (Can be deleted after 1.0.0)
 
