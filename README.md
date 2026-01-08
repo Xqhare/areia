@@ -253,7 +253,7 @@ To keep it zero-dependency, I need to write these:
 ### Possible Project Suructure
 
 ```
-hidden_app_dirs/
+areia/
 ├── Cargo.toml
 └── src/
     ├── lib.rs            // The public API (AppDir, Config locations)
@@ -261,7 +261,12 @@ hidden_app_dirs/
     ├── platform/         // The engine room
     │   ├── mod.rs        // Dispatches to unix.rs or windows.rs based on cfg
     │   ├── unix.rs       // Dotfile logic + File Permissions (0o700)
-    │   ├── windows.rs    // FFI calls to kernel32.dll + Attribute logic
-    │   └── macos.rs      // (Optional) Specific tweaks if you go beyond unix defaults
-    └── utils.rs          // Helpers (Path sanitization, env var fallbacks)
+    │   ├── macos.rs      // (Optional) Specific tweaks if you go beyond unix defaults
+    │   └── windows.rs    // FFI calls to kernel32.dll + Attribute logic
+    └── utils/            // Helpers (Path sanitization, env var fallbacks)
+        ├── mod.rs
+        ├── unix.rs       // Unix-specific helpers and fallbacks
+        ├── macos.rs      // macOS-specific helpers and fallbacks
+        └── windows.rs    // Windows-specific helpers and fallbacks
 ```
+
