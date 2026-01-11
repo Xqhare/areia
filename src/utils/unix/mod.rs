@@ -1,6 +1,7 @@
 use crate::error::{AreiaError, AreiaResult};
 
-use super::platform::windows;
+#[cfg(target_os = "macos")]
+mod macos;
 
 /// Get the user's home directory
 ///
@@ -11,14 +12,10 @@ use super::platform::windows;
 /// `Ok(path)` if the home directory could be found
 /// `Err(AreiaError::CantGetHomeDir)` if the home directory could not be found
 pub fn get_home() -> AreiaResult<std::path::PathBuf> {
-    if let Ok(path) = windows::get_path(windows::FolderID::Profile) {
-        Ok(path)
-    } else { 
-        if let Some(path) = std::env::var_os("USERPROFILE") {
-            Ok(path.into())
-        } else {
-            Err(AreiaError::CantGetHomeDir)
-        }
+    if let Some(path) = std::env::var_os("HOME") {
+        return Ok(path.into());
+    } else {
+        Err(AreiaError::CantGetHomeDir)
     }
 }
 
@@ -30,5 +27,8 @@ pub fn get_home() -> AreiaResult<std::path::PathBuf> {
 /// `Ok(path)` if the path could be found
 /// `Err(AreiaError::IoError(err))` if IO error occurred
 pub fn get_exe() -> AreiaResult<std::path::PathBuf> {
-    unimplemented!();
+    match std::env::current_exe() {
+        Ok(path) => Ok(path),
+        Err(err) => Err(AreiaError::IoError(err)),
+    }
 }
