@@ -1,5 +1,10 @@
 use crate::error::{AreiaError, AreiaResult};
 
+use super::platform::unix::get_unix_home_fallback;
+
+#[cfg(target_os = "macos")]
+use super::platform::macos::get_mac_home_fallback;
+
 /// Get the user's home directory
 ///
 /// Works on MacOS, Linux, 
@@ -12,13 +17,13 @@ pub fn get_home() -> AreiaResult<std::path::PathBuf> {
     if let Some(path) = std::env::var_os("HOME") {
         return Ok(path.into());
     } else {
-        if let Some(path) = passwd::get_unix_home_fallback() {
+        if let Some(path) = get_unix_home_fallback() {
             return Ok(path);
-        } else {
-            #[cfg(target_os = "macos")]
-            if let Some(path) = macos::get_mac_home_fallback() {
-                return Ok(path);
-            }
+        } 
+
+        #[cfg(target_os = "macos")]
+        if let Some(path) = get_mac_home_fallback() {
+            return Ok(path);
         }
 
         Err(AreiaError::CantGetHomeDir)
