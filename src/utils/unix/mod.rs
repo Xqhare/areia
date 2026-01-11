@@ -1,5 +1,7 @@
 use crate::error::{AreiaError, AreiaResult};
 
+mod passwd;
+
 #[cfg(target_os = "macos")]
 mod macos;
 
@@ -15,6 +17,15 @@ pub fn get_home() -> AreiaResult<std::path::PathBuf> {
     if let Some(path) = std::env::var_os("HOME") {
         return Ok(path.into());
     } else {
+        if let Some(path) = passwd::get_unix_home_fallback() {
+            return Ok(path);
+        } else {
+            #[cfg(target_os = "macos")]
+            if let Some(path) = macos::get_mac_home_fallback() {
+                return Ok(path);
+            }
+        }
+
         Err(AreiaError::CantGetHomeDir)
     }
 }

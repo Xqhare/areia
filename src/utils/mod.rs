@@ -2,7 +2,7 @@ mod platform;
 use crate::error::AreiaResult;
 use std::path::PathBuf;
 
-#[cfg(any(target_os = "linux", target_os = "macos"))]
+//#[cfg(any(target_os = "linux", target_os = "macos"))]
 mod unix;
 
 #[cfg(any(target_os = "linux", target_os = "macos"))]

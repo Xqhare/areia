@@ -7,7 +7,7 @@ type CFURLRef = CFRef;
 type CFStringRef = CFRef;
 
 #[link(name = "CoreFoundation", kind = "framework")]
-extern "C" {
+unsafe extern "C" {
     fn CFCopyHomeDirectoryURL() -> CFURLRef;
     fn CFURLCopyFileSystemPath(an_url: CFURLRef, pathstyle: i64) -> CFStringRef;
     fn CFStringGetLength(the_string: CFStringRef) -> isize;
