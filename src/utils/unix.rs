@@ -1,3 +1,5 @@
+use std::{ffi::OsString, path::PathBuf};
+
 use crate::error::{AreiaError, AreiaResult};
 
 use super::platform::unix::get_unix_home_fallback;
@@ -30,16 +32,30 @@ pub fn get_home() -> AreiaResult<std::path::PathBuf> {
     }
 }
 
-/// Get the path to the current executable
-///
-/// Only supported on Linux
+/// Checks if supplied path is an absolute path
 ///
 /// # Returns
-/// `Ok(path)` if the path could be found
-/// `Err(AreiaError::IoError(err))` if IO error occurred
-pub fn get_exe() -> AreiaResult<std::path::PathBuf> {
-    match std::env::current_exe() {
-        Ok(path) => Ok(path),
-        Err(err) => Err(AreiaError::IoError(err)),
+/// `Some(path)` if the path is absolute, the path is converted to `PathBuf`
+/// `None` if the path is not absolute
+pub fn is_absolute_path(path: OsString) -> Option<PathBuf> {
+    let path = PathBuf::from(path);
+    if path.is_absolute() {
+        Some(path)
+    } else {
+        None
+    }
+}
+
+/// Checks if supplied path exists
+///
+/// # Returns
+/// `Some(path)` if the path exists, the path is converted to `PathBuf`
+/// `None` if the path does not exist
+pub fn is_existent_path<P: Into<PathBuf>>(path: P) -> Option<PathBuf> {
+    let path = path.into();
+    if path.exists() {
+        Some(path)
+    } else {
+        None
     }
 }

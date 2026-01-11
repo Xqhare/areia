@@ -1,5 +1,7 @@
 use std::path::PathBuf;
 
+use crate::{error::AreiaResult, utils};
+
 #[derive(Debug, Clone)]
 pub struct BaseDirs {
     home_dir: PathBuf,
@@ -14,3 +16,14 @@ pub struct BaseDirs {
     state_dir: Option<PathBuf>
 }
 
+#[cfg(target_os = "linux")]
+pub fn base_dirs() -> AreiaResult<BaseDirs> {
+
+    match utils::get_home() {
+        Ok(home) => {
+            let cache_dir = ca
+            
+        },
+        Err(err) => Err(err)
+    }
+}
