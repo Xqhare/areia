@@ -1,6 +1,5 @@
 use std::path::PathBuf;
 use std::ffi::{CStr, OsString};
-use std::os::unix::ffi::OsStrExt;
 
 
 #[repr(C)]
