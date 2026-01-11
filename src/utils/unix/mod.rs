@@ -1,10 +1,5 @@
 use crate::error::{AreiaError, AreiaResult};
 
-mod passwd;
-
-#[cfg(target_os = "macos")]
-mod macos;
-
 /// Get the user's home directory
 ///
 /// Works on MacOS, Linux, 
