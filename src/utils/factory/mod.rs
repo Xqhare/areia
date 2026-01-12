@@ -26,19 +26,31 @@ pub fn config_dir(home: PathBuf) -> PathBuf {
     os::config_dir(home)
 }
 
+pub fn config_local_dir(home: PathBuf) -> PathBuf {
+    os::config_local_dir(home)
+}
+
 pub fn data_dir(home: PathBuf) -> PathBuf {
     os::data_dir(home)
+}
+
+pub fn data_local_dir(home: PathBuf) -> PathBuf {
+    os::data_local_dir(home)
+}
+
+pub fn preference_dir(home: PathBuf) -> PathBuf {
+    os::preference_dir(home)
 }
 
 pub fn runtime_dir() -> Option<PathBuf> {
     os::runtime_dir()
 }
 
-pub fn state_dir(home: PathBuf) -> PathBuf {
+pub fn state_dir(home: PathBuf) -> Option<PathBuf> {
     os::state_dir(home)
 }
 
-pub fn executable_dir(home: PathBuf) -> PathBuf {
+pub fn executable_dir(home: PathBuf) -> Option<PathBuf> {
     os::executable_dir(home)
 }
 
