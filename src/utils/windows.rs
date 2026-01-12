@@ -1,6 +1,6 @@
 use crate::error::{AreiaError, AreiaResult};
 
-use super::platform::windows;
+use super::ffi::windows;
 
 /// Get the user's home directory
 ///

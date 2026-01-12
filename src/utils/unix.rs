@@ -2,10 +2,10 @@ use std::{ffi::OsString, path::PathBuf};
 
 use crate::error::{AreiaError, AreiaResult};
 
-use super::platform::unix::get_unix_home_fallback;
+use super::ffi::unix::get_unix_home_fallback;
 
 #[cfg(target_os = "macos")]
-use super::platform::macos::get_mac_home_fallback;
+use super::ffi::macos::get_mac_home_fallback;
 
 /// Get the user's home directory
 ///

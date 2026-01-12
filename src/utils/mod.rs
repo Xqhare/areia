@@ -1,4 +1,4 @@
-mod platform;
+mod ffi;
 use crate::error::AreiaResult;
 use std::path::PathBuf;
 
