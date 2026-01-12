@@ -1,6 +1,6 @@
 mod utils;
 mod dirs;
-pub use dirs::{BaseDirs, ProjectDirs, UserDirs};
+pub use dirs::{BaseDirs, UserDirs};
 
 pub mod error;
 
