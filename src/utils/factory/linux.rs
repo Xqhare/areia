@@ -83,14 +83,7 @@ pub fn executable_dir(home: PathBuf) -> Option<PathBuf> {
     }
 }
 
-pub fn font_dir(home: PathBuf) -> PathBuf {
-    if let Some(path) = is_existent_path(home.join(".local/share/fonts")) {
-        path
-    } else {
-        // Judging by the `directories` source code, `home.join` should always return a valid path
-        unreachable!("Font directory could not be found!");
-    }
-}
+pub fn font_dir(home: PathBuf) -> Option<PathBuf> { is_existent_path(home.join(".local/share/fonts")) }
 
 pub fn get_usr_dirs<P: Into<PathBuf>>(home: P) -> AreiaResult<HashMap<String, PathBuf>> {
     let home = home.into();
