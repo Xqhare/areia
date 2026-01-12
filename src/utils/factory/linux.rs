@@ -28,6 +28,18 @@ pub fn config_dir(home: PathBuf) -> PathBuf {
     }
 }
 
+pub fn config_local_dir(home: PathBuf) -> PathBuf {
+    config_dir(home)
+}
+
+pub fn data_local_dir(home: PathBuf) -> PathBuf {
+    data_dir(home)
+}
+
+pub fn preference_dir(home: PathBuf) -> PathBuf {
+    config_dir(home)
+}
+
 pub fn data_dir(home: PathBuf) -> PathBuf {
     if let Some(path) = env::var_os("XDG_DATA_HOME").and_then(|x| is_absolute_path(x)) {
         path
@@ -45,12 +57,12 @@ pub fn runtime_dir() -> Option<PathBuf> {
     env::var_os("XDG_RUNTIME_DIR").and_then(|x| is_absolute_path(x))
 }
 
-pub fn state_dir(home: PathBuf) -> PathBuf {
+pub fn state_dir(home: PathBuf) -> Option<PathBuf> {
     if let Some(path) = env::var_os("XDG_STATE_HOME").and_then(|x| is_absolute_path(x)) {
-        path
+        Some(path)
     } else {
         if let Some(path) = is_existent_path(home.join(".local/state")) {
-            path
+            Some(path)
         } else {
             // Judging by the `directories` source code, `home.join` should always return a valid path
             unreachable!("State directory could not be found!");
@@ -58,12 +70,12 @@ pub fn state_dir(home: PathBuf) -> PathBuf {
     }
 }
 
-pub fn executable_dir(home: PathBuf) -> PathBuf {
+pub fn executable_dir(home: PathBuf) -> Option<PathBuf> {
     if let Some(path) = env::var_os("XDG_BIN_HOME").and_then(|x| is_absolute_path(x)) {
-        path
+        Some(path)
     } else {
         if let Some(path) = is_existent_path(home.join(".local/bin")) {
-            path
+            Some(path)
         } else {
             // Judging by the `directories` source code, `home.join` should always return a valid path
             unreachable!("Executable directory could not be found!");
