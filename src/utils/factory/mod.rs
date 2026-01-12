@@ -14,7 +14,9 @@ mod linux;
 #[cfg(target_os = "linux")]
 use linux as os;
 
-use std::path::PathBuf;
+use std::{collections::HashMap, path::PathBuf};
+
+use crate::error::AreiaResult;
 
 pub fn cache_dir(home: PathBuf) -> PathBuf {
     os::cache_dir(home)
@@ -38,4 +40,8 @@ pub fn state_dir(home: PathBuf) -> PathBuf {
 
 pub fn executable_dir(home: PathBuf) -> PathBuf {
     os::executable_dir(home)
+}
+
+pub fn get_usr_dirs(home: PathBuf) -> AreiaResult<HashMap<String, PathBuf>> {
+    os::get_usr_dirs(home)
 }

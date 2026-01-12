@@ -1,9 +1,10 @@
 use std::path::PathBuf;
 use std::ffi::{CStr, OsString};
+use std::os::unix::ffi::OsStringExt;
 
 
 #[repr(C)]
-struct passwd {
+struct Passwd {
     pub pw_name: *mut i8,
     pub pw_passwd: *mut i8,
     pub pw_uid: u32,
@@ -18,17 +19,17 @@ unsafe extern "C" {
     fn getuid() -> u32;
     fn getpwuid_r(
         uid: u32, 
-        pwd: *mut passwd, 
+        pwd: *mut Passwd, 
         buf: *mut i8, 
         buflen: usize, 
-        result: *mut *mut passwd
+        result: *mut *mut Passwd
     ) -> i32;
 }
 
 pub fn get_unix_home_fallback() -> Option<PathBuf> {
     unsafe {
         let uid = getuid();
-        let mut pwd = std::mem::zeroed::<passwd>();
+        let mut pwd = std::mem::zeroed::<Passwd>();
         let mut res = std::ptr::null_mut();
         // Some systems define sysconf(_SC_GETPW_R_SIZE_MAX) to something different - too bad!
         let mut buf = vec![0i8; 1024];
