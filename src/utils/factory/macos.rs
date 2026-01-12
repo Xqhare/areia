@@ -1,3 +1,7 @@
+use std::{collections::HashMap, path::PathBuf};
+
+use crate::error::AreiaResult;
+
 pub fn cache_dir(home: PathBuf) -> PathBuf {
     home.join("Library").join("Caches")
 }
@@ -22,19 +26,19 @@ pub fn runtime_dir() -> Option<PathBuf> {
     None
 }
 
-pub fn state_dir(home: PathBuf) -> Option<PathBuf> {
+pub fn state_dir(_home: PathBuf) -> Option<PathBuf> {
     None
 }
 
-pub fn executable_dir(home: PathBuf) -> Option<PathBuf> {
+pub fn executable_dir(_home: PathBuf) -> Option<PathBuf> {
     None
 }
 
 pub fn preference_dir(home: PathBuf) -> PathBuf {
     home.join("Library").join("Preferences")
 }
-pub fn font_dir(home: PathBuf) -> PathBuf {
-    home.join("Library").join("Fonts")
+pub fn font_dir(home: PathBuf) -> Option<PathBuf> {
+    Some(home.join("Library").join("Fonts"))
 }
 
 pub fn get_usr_dirs<P: Into<PathBuf>>(home: P) -> AreiaResult<HashMap<String, PathBuf>> {
