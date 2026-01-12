@@ -50,7 +50,6 @@ const FOLDERID_PROFILE: GUID = GUID {
     data4: [0x9A, 0xFE, 0xEA, 0x33, 0x17, 0xB6, 0x71, 0x71]
 };
 
-// Base
 const FOLDERID_LOCALAPPDATA: GUID = GUID {
     data1: 0xf1b32785,
     data2: 0x6fba,
@@ -65,7 +64,6 @@ const FOLDERID_ROAMINGAPPDATA: GUID = GUID {
     data4: [0xa0, 0x3a, 0xe3, 0xef, 0x65, 0x72, 0x9f, 0x3d]
 };
 
-// User
 const FOLDERID_DESKTOP: GUID = GUID {
     data1: 0xb4bfcc3a,
     data2: 0xdb2c,
@@ -94,7 +92,6 @@ const FOLDERID_MUSIC: GUID = GUID {
     data4: [0xbe, 0x97, 0x42, 0x22, 0x20, 0x08, 0x0e, 0x43]
 };
 
-// 33E28130-4E1E-4676-835A-98395C3BC3BB
 const FOLDERID_PICTURE: GUID = GUID {
     data1: 0x33e28130,
     data2: 0x4e1e,
@@ -102,7 +99,6 @@ const FOLDERID_PICTURE: GUID = GUID {
     data4: [0x83, 0x5a, 0x98, 0x39, 0x5c, 0x3b, 0xc3, 0xbb]
 };
 
-// DFDF76A2-C82A-4D63-906A-5644AC457385
 const FOLDERID_PUBLIC: GUID = GUID {
     data1: 0xdfdf76a2,
     data2: 0xc82a,
@@ -110,7 +106,6 @@ const FOLDERID_PUBLIC: GUID = GUID {
     data4: [0x90, 0x6a, 0x56, 0x44, 0xac, 0x45, 0x73, 0x85]
 };
 
-// A63293E8-664E-48DB-A079-DF759E0509F7
 const FOLDERID_TEMPLATE: GUID = GUID {
     data1: 0xa63293e8,
     data2: 0x664e,
@@ -118,7 +113,6 @@ const FOLDERID_TEMPLATE: GUID = GUID {
     data4: [0xa0, 0x79, 0xdf, 0x75, 0x9e, 0x05, 0x09, 0xf7]
 };
 
-// 18989B1D-99B5-455B-841C-AB7C74E4DDFC
 const FOLDERID_VIDEO: GUID = GUID {
     data1: 0x18989b1d,
     data2: 0x99b5,
