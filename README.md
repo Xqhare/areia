@@ -14,13 +14,13 @@ All mayor Operating Systems (Windows, Linux, MacOS) are supported.
     - [ ] Environment Variable Resolution
         - [ ] Linux
             - [ ] User Space
-                - [ ] Home
-                - [ ] Cache
-                - [ ] Config
-                - [ ] Local
-                    - [ ] Data
-                    - [ ] State
-                    - [ ] Bin
+                - [x] Home
+                - [x] Cache
+                - [x] Config
+                - [x] Local
+                    - [x] Data
+                    - [x] State
+                    - [x] Bin
                 - [ ] Audio
                 - [ ] Desktop
                 - [ ] Document
