@@ -4,7 +4,7 @@ Create valid paths and hidden directories for your application on Windows, Linux
 
 This zero-dependency Rust crate manages hidden config and state directories across Windows, Linux, and macOS, handling platform-specific hiding logic automatically. Like the Greek nymph who hid her son in vines, Areia keeps your data safe and unseen if needed.
 
-I want to shout out [dirs](https://crates.io/crates/dirs) and [directories](https://crates.io/crates/directories), as I have used their API to model this crate off of!
+I want to shout out [dirs](https://crates.io/crates/dirs) and [directories](https://crates.io/crates/directories), as they inspired this crate!
 
 All mayor Operating Systems (Windows, Linux, MacOS) are supported.
 
@@ -13,89 +13,56 @@ All mayor Operating Systems (Windows, Linux, MacOS) are supported.
 - [ ] Core Functionality
     - [ ] Environment Variable Resolution
         - [ ] Linux
-            - [ ] User Space
-                - [x] Home
-                - [x] Cache
-                - [x] Config
-                - [x] Local
-                    - [x] Data
-                    - [x] State
-                    - [x] Bin
-                - [ ] Audio
-                - [ ] Desktop
-                - [ ] Document
-                - [ ] Download
-                - [ ] Font
-                - [ ] Picture
-                - [ ] Public
-                - [ ] Template
-                - [ ] Video
-            - [ ] Project Space
-                - [ ] Cache
-                - [ ] Config
-                - [ ] Local
-                    - [ ] Data
-                    - [ ] Config
-                - [ ] Data
-                - [ ] Preference
-                - [ ] Runtime
-                - [ ] State
+            - [x] Home
+            - [x] Cache
+            - [x] Config
+            - [x] Local
+                - [x] Data
+                - [x] State
+                - [x] Bin
+            - [ ] Audio
+            - [ ] Desktop
+            - [ ] Document
+            - [ ] Download
+            - [ ] Font
+            - [ ] Picture
+            - [ ] Public
+            - [ ] Template
+            - [ ] Video
         - [ ] Windows
-            - [ ] User Space
-                - [ ] Home
-                - [ ] Cache
-                - [ ] Config
-                - [ ] Local
-                    - [ ] Data
-                    - [ ] State
-                    - [ ] Bin
-                - [ ] Audio
-                - [ ] Desktop
-                - [ ] Document
-                - [ ] Download
-                - [ ] Font
-                - [ ] Picture
-                - [ ] Public
-                - [ ] Template
-                - [ ] Video
-            - [ ] Project Space
-                - [ ] Cache
-                - [ ] Config
-                - [ ] Local
-                    - [ ] Data
-                    - [ ] Config
-                - [ ] Data
-                - [ ] Preference
-                - [ ] Runtime
-                - [ ] State
+            - [x] Home
+            - [x] Cache
+            - [x] Config
+            - [x] Local
+                - [x] Data
+                - [x] State
+                - [x] Bin
+            - [ ] Audio
+            - [ ] Desktop
+            - [ ] Document
+            - [ ] Download
+            - [ ] Font
+            - [ ] Picture
+            - [ ] Public
+            - [ ] Template
+            - [ ] Video
         - [ ] MacOS
-            - [ ] User Space
-                - [ ] Home
-                - [ ] Cache
-                - [ ] Config
-                - [ ] Local
-                    - [ ] Data
-                    - [ ] State
-                    - [ ] Bin
-                - [ ] Audio
-                - [ ] Desktop
-                - [ ] Document
-                - [ ] Download
-                - [ ] Font
-                - [ ] Picture
-                - [ ] Public
-                - [ ] Template
-                - [ ] Video
-            - [ ] Project Space
-                - [ ] Cache
-                - [ ] Config
-                - [ ] Local
-                    - [ ] Data
-                    - [ ] Config
-                - [ ] Data
-                - [ ] Preference
-                - [ ] Runtime
-                - [ ] State
+            - [x] Home
+            - [x] Cache
+            - [x] Config
+            - [x] Local
+                - [x] Data
+                - [x] State
+                - [x] Bin
+            - [ ] Audio
+            - [ ] Desktop
+            - [ ] Document
+            - [ ] Download
+            - [ ] Font
+            - [ ] Picture
+            - [ ] Public
+            - [ ] Template
+            - [ ] Video
     - [ ] Platform-Specific "Hide" Implementation
         - [ ] Windows
         - [ ] Linux
@@ -109,7 +76,7 @@ All mayor Operating Systems (Windows, Linux, MacOS) are supported.
     - [ ] Windows "System" Flag
     - [ ] Redaction/Privacy Helpers
     - [ ] Directory "Auto-Creator"
-    - [ ] Directory "Auto-Deleter"
+    - [ ] Directory "Auto-Deletor"
     - [ ] Path "Normalizer"
 - [ ] Support system level directories (maybe - after 1.0.0)
     - [ ] Windows
@@ -182,22 +149,6 @@ that have been defined according to the conventions of the operating system the 
 | `public_dir`     | `Some(XDG_PUBLICSHARE_DIR)`     or `None`                              | `Some({FOLDERID_Public})`        | `Some($HOME`/Public/`)`        |
 | `template_dir`   | `Some(XDG_TEMPLATES_DIR)`       or `None`                              | `Some({FOLDERID_Templates})`     | `None`                         | 
 | `video_dir`      | `Some(XDG_VIDEOS_DIR)`          or `None`                              | `Some({FOLDERID_Videos})`        | `Some($HOME`/Movies/`)`        |
-
-### `ProjectDirs`
-
-The intended use case for `ProjectDirs` is to compute the location of cache, config or data directories for your own application or project,
-which are derived from the standard directories.
-
-| Function name      | Value on Linux                                                                     | Value on Windows                                    | Value on macOS                                       |
-|--------------------|------------------------------------------------------------------------------------|-----------------------------------------------------| ---------------------------------------------------- |
-| `cache_dir`        | `$XDG_CACHE_HOME`/`<project_path>`        or `$HOME`/.cache/`<project_path>`       | `{FOLDERID_LocalAppData}`/`<project_path>`/cache    | `$HOME`/Library/Caches/`<project_path>`              |
-| `config_dir`       | `$XDG_CONFIG_HOME`/`<project_path>`       or `$HOME`/.config/`<project_path>`      | `{FOLDERID_RoamingAppData}`/`<project_path>`/config | `$HOME`/Library/Application Support/`<project_path>` |
-| `config_local_dir` | `$XDG_CONFIG_HOME`/`<project_path>`       or `$HOME`/.config/`<project_path>`      | `{FOLDERID_LocalAppData}`/`<project_path>`/config   | `$HOME`/Library/Application Support/`<project_path>` |
-| `data_dir`         | `$XDG_DATA_HOME`/`<project_path>`         or `$HOME`/.local/share/`<project_path>` | `{FOLDERID_RoamingAppData}`/`<project_path>`/data   | `$HOME`/Library/Application Support/`<project_path>` |
-| `data_local_dir`   | `$XDG_DATA_HOME`/`<project_path>`         or `$HOME`/.local/share/`<project_path>` | `{FOLDERID_LocalAppData}`/`<project_path>`/data     | `$HOME`/Library/Application Support/`<project_path>` |
-| `preference_dir`   | `$XDG_CONFIG_HOME`/`<project_path>`       or `$HOME`/.config/`<project_path>`      | `{FOLDERID_RoamingAppData}`/`<project_path>`/config | `$HOME`/Library/Preferences/`<project_path>`         |
-| `runtime_dir`      | `Some($XDG_RUNTIME_DIR`/`<project_path>)`                                          | `None`                                              | `None`                                               |
-| `state_dir`        | `Some($XDG_STATE_HOME`/`<project_path>)`  or `$HOME`/.local/state/`<project_path>` | `None`                                              | `None`                                               |
 
 ### 1. The "Must-Haves" (Core Functionality)
 
