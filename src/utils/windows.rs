@@ -22,13 +22,3 @@ pub fn get_home() -> AreiaResult<std::path::PathBuf> {
     }
 }
 
-/// Get the path to the current executable
-///
-/// Only supported on Linux
-///
-/// # Returns
-/// `Ok(path)` if the path could be found
-/// `Err(AreiaError::IoError(err))` if IO error occurred
-pub fn get_exe() -> AreiaResult<std::path::PathBuf> {
-    unimplemented!();
-}
