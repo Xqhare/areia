@@ -190,21 +190,17 @@ fn parse_xdg_dirs(bytes: Vec<u8>, home: PathBuf) -> AreiaResult<HashMap<String, 
 fn xdg_user_dir_parsing() {
     let home = env::var_os("HOME").unwrap();
     let home_path = PathBuf::from(home.clone());
-    // For Github Workflow testing - No XDG is provided there
-    if !home_path.clone().join(".config").join("user-dirs.dirs").exists() {
-        assert!(true)
-    } else {
-        let dirs = get_usr_dirs(home).unwrap();
-        assert_eq!(dirs.len(), 9);
+    
+    let dirs = get_usr_dirs(home).unwrap();
+    assert_eq!(dirs.len(), 9);
 
-        assert_eq!(dirs.get("DESKTOP").unwrap(), &Some(home_path.join("Desktop")));
-        assert_eq!(dirs.get("DOCUMENTS").unwrap(), &Some(home_path.join("Documents")));
-        assert_eq!(dirs.get("DOWNLOADS").unwrap(), &Some(home_path.join("Downloads")));
-        assert_eq!(dirs.get("MUSIC").unwrap(), &Some(home_path.join("Music")));
-        assert_eq!(dirs.get("PICTURES").unwrap(), &Some(home_path.join("Pictures")));
-        assert_eq!(dirs.get("PUBLICSHARE").unwrap(), &Some(home_path.join("Public")));
-        assert_eq!(dirs.get("TEMPLATES").unwrap(), &Some(home_path.join("Templates")));
-        assert_eq!(dirs.get("VIDEOS").unwrap(), &Some(home_path.join("Videos")));
-        assert!(dirs.get("FONTS").unwrap().is_some());
-    }
+    assert_eq!(dirs.get("DESKTOP").unwrap(), &Some(home_path.join("Desktop")));
+    assert_eq!(dirs.get("DOCUMENTS").unwrap(), &Some(home_path.join("Documents")));
+    assert_eq!(dirs.get("DOWNLOADS").unwrap(), &Some(home_path.join("Downloads")));
+    assert_eq!(dirs.get("MUSIC").unwrap(), &Some(home_path.join("Music")));
+    assert_eq!(dirs.get("PICTURES").unwrap(), &Some(home_path.join("Pictures")));
+    assert_eq!(dirs.get("PUBLICSHARE").unwrap(), &Some(home_path.join("Public")));
+    assert_eq!(dirs.get("TEMPLATES").unwrap(), &Some(home_path.join("Templates")));
+    assert_eq!(dirs.get("VIDEOS").unwrap(), &Some(home_path.join("Videos")));
+    assert!(dirs.get("FONTS").unwrap().is_some());
 }
