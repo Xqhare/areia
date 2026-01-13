@@ -1,4 +1,4 @@
-use std::{ffi::{c_void, OsString}, fmt::Display, path::PathBuf, os::windows::ffi::OsStringExt};
+use std::{ffi::{c_void, OsString}, fmt::Display, path::{PathBuf, Path}, os::windows::ffi::{OsStringExt, OsStrExt}};
 
 use crate::error::{AreiaError, AreiaResult};
 
@@ -148,7 +148,7 @@ unsafe extern "system" {
 }
 
 /// Sets the hidden attribute for a file or directory and keeps any existing attributes
-pub fn set_hidden(path: &Path) -> AreiaResult<()> {
+pub fn hide(path: &Path) -> AreiaResult<()> {
     let wide_path: Vec<u16> = path.as_os_str()
         .encode_wide()
         .chain(std::iter::once(0))
@@ -197,9 +197,8 @@ pub fn superhide(path: &Path) -> AreiaResult<()> {
     Ok(())
 }
 
-
 /// Removes the hidden attribute for a file or directory and keeps any existing attributes
-pub fn unhide(path: &Path) -> AreiaResult<()> {
+pub fn un_superhide(path: &Path) -> AreiaResult<()> {
     let wide_path: Vec<u16> = path.as_os_str()
         .encode_wide()
         .chain(std::iter::once(0))
@@ -213,6 +212,33 @@ pub fn unhide(path: &Path) -> AreiaResult<()> {
 
         let mut new_attrs = attrs & !FILE_ATTRIBUTE_HIDDEN;
         new_attrs &= !FILE_ATTRIBUTE_SYSTEM;
+        if new_attrs == 0 {
+            new_attrs = FILE_ATTRIBUTE_NORMAL;
+        }
+
+        let result = SetFileAttributesW(wide_path.as_ptr(), new_attrs);
+        if result == 0 {
+            return Err(AreiaError::WindowsError("Failed to remove hidden attribute".to_string()));
+        }
+    }
+    
+    Ok(())
+}
+
+/// Removes the hidden attribute for a file or directory and keeps any existing attributes
+pub fn un_hide(path: &Path) -> AreiaResult<()> {
+    let wide_path: Vec<u16> = path.as_os_str()
+        .encode_wide()
+        .chain(std::iter::once(0))
+        .collect();
+
+    unsafe {
+        let attrs = GetFileAttributesW(wide_path.as_ptr());
+        if attrs == INVALID_FILE_ATTRIBUTES {
+            return Err(AreiaError::WindowsError("Failed to get attributes for unhiding".to_string()));
+        }
+
+        let mut new_attrs = attrs & !FILE_ATTRIBUTE_HIDDEN;
         if new_attrs == 0 {
             new_attrs = FILE_ATTRIBUTE_NORMAL;
         }
