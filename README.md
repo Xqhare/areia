@@ -11,8 +11,8 @@ All mayor Operating Systems (Windows, Linux, MacOS) are supported.
 ## Roadmap
 
 - [ ] Core Functionality
-    - [ ] Environment Variable Resolution
-        - [ ] Linux
+    - [x] Environment Variable Resolution
+        - [x] Linux
             - [x] Home
             - [x] Cache
             - [x] Config
@@ -20,16 +20,16 @@ All mayor Operating Systems (Windows, Linux, MacOS) are supported.
                 - [x] Data
                 - [x] State
                 - [x] Bin
-            - [ ] Audio
-            - [ ] Desktop
-            - [ ] Document
-            - [ ] Download
-            - [ ] Font
-            - [ ] Picture
-            - [ ] Public
-            - [ ] Template
-            - [ ] Video
-        - [ ] Windows
+            - [x] Audio
+            - [x] Desktop
+            - [x] Document
+            - [x] Download
+            - [x] Font
+            - [x] Picture
+            - [x] Public
+            - [x] Template
+            - [x] Video
+        - [x] Windows
             - [x] Home
             - [x] Cache
             - [x] Config
@@ -37,16 +37,16 @@ All mayor Operating Systems (Windows, Linux, MacOS) are supported.
                 - [x] Data
                 - [x] State
                 - [x] Bin
-            - [ ] Audio
-            - [ ] Desktop
-            - [ ] Document
-            - [ ] Download
-            - [ ] Font
-            - [ ] Picture
-            - [ ] Public
-            - [ ] Template
-            - [ ] Video
-        - [ ] MacOS
+            - [x] Audio
+            - [x] Desktop
+            - [x] Document
+            - [x] Download
+            - [x] Font
+            - [x] Picture
+            - [x] Public
+            - [x] Template
+            - [x] Video
+        - [x] MacOS
             - [x] Home
             - [x] Cache
             - [x] Config
@@ -54,15 +54,15 @@ All mayor Operating Systems (Windows, Linux, MacOS) are supported.
                 - [x] Data
                 - [x] State
                 - [x] Bin
-            - [ ] Audio
-            - [ ] Desktop
-            - [ ] Document
-            - [ ] Download
-            - [ ] Font
-            - [ ] Picture
-            - [ ] Public
-            - [ ] Template
-            - [ ] Video
+            - [x] Audio
+            - [x] Desktop
+            - [x] Document
+            - [x] Download
+            - [x] Font
+            - [x] Picture
+            - [x] Public
+            - [x] Template
+            - [x] Video
     - [ ] Platform-Specific "Hide" Implementation
         - [ ] Windows
         - [ ] Linux
