@@ -120,8 +120,13 @@ const FOLDERID_VIDEO: GUID = GUID {
     data4: [0x84, 0x1c, 0xab, 0x7c, 0x74, 0xe4, 0xdd, 0xfc]
 };
 
+const FILE_ATTRIBUTE_HIDDEN: u32 = 0x02;
+// For "super" hiding like on mac
+const FILE_ATTRIBUTE_SYSTEM: u32 = 0x04;
+const FILE_ATTRIBUTE_NORMAL: u32 = 0x80;
+const INVALID_FILE_ATTRIBUTES: u32 = u32::MAX;
+
 #[link(name = "shell32")]
-#[link(name = "ole32")]
 unsafe extern "system" {
     fn SHGetKnownFolderPath(
         rfid: *const GUID,
@@ -129,9 +134,118 @@ unsafe extern "system" {
         hToken: *mut c_void,
         ppszPath: *mut *mut u16
     ) -> i32;
+}
+
+#[link(name = "ole32")]
+unsafe extern "system" {
     fn CoTaskMemFree(pv: *mut c_void);
 }
 
+#[link(name = "kernel32")]
+unsafe extern "system" {
+    fn SetFileAttributesW(lpFileName: *const u16, dwFileAttributes: u32) -> i32;
+    fn GetFileAttributesW(lpFileName: *const u16) -> u32;
+}
+
+/// Sets the hidden attribute for a file or directory and keeps any existing attributes
+pub fn set_hidden(path: &Path) -> AreiaResult<()> {
+    let wide_path: Vec<u16> = path.as_os_str()
+        .encode_wide()
+        .chain(std::iter::once(0))
+        .collect();
+
+    unsafe {
+        let attrs = GetFileAttributesW(wide_path.as_ptr());
+        if attrs == INVALID_FILE_ATTRIBUTES {
+            return Err(AreiaError::WindowsError("Failed to get attributes for hiding".to_string()));
+        }
+
+        let mut new_attrs = attrs | FILE_ATTRIBUTE_HIDDEN;
+        new_attrs &= !FILE_ATTRIBUTE_NORMAL;
+
+        let result = SetFileAttributesW(wide_path.as_ptr(), new_attrs);
+        if result == 0 {
+            return Err(AreiaError::WindowsError("Failed to set hidden attribute".to_string()));
+        }
+    }
+    
+    Ok(())
+}
+
+pub fn superhide(path: &Path) -> AreiaResult<()> {
+    let wide_path: Vec<u16> = path.as_os_str()
+        .encode_wide()
+        .chain(std::iter::once(0))
+        .collect();
+
+    unsafe {
+        let attrs = GetFileAttributesW(wide_path.as_ptr());
+        if attrs == INVALID_FILE_ATTRIBUTES {
+            return Err(AreiaError::WindowsError("Failed to get attributes for super hiding".to_string()));
+        }
+
+        let mut new_attrs = attrs | FILE_ATTRIBUTE_HIDDEN;
+        new_attrs |= FILE_ATTRIBUTE_SYSTEM;
+        new_attrs &= !FILE_ATTRIBUTE_NORMAL;
+
+        let result = SetFileAttributesW(wide_path.as_ptr(), new_attrs);
+        if result == 0 {
+            return Err(AreiaError::WindowsError("Failed to set super hidden attributes".to_string()));
+        }
+    }
+    
+    Ok(())
+}
+
+
+/// Removes the hidden attribute for a file or directory and keeps any existing attributes
+pub fn unhide(path: &Path) -> AreiaResult<()> {
+    let wide_path: Vec<u16> = path.as_os_str()
+        .encode_wide()
+        .chain(std::iter::once(0))
+        .collect();
+
+    unsafe {
+        let attrs = GetFileAttributesW(wide_path.as_ptr());
+        if attrs == INVALID_FILE_ATTRIBUTES {
+            return Err(AreiaError::WindowsError("Failed to get attributes for unhiding".to_string()));
+        }
+
+        let mut new_attrs = attrs & !FILE_ATTRIBUTE_HIDDEN;
+        new_attrs &= !FILE_ATTRIBUTE_SYSTEM;
+        if new_attrs == 0 {
+            new_attrs = FILE_ATTRIBUTE_NORMAL;
+        }
+
+        let result = SetFileAttributesW(wide_path.as_ptr(), new_attrs);
+        if result == 0 {
+            return Err(AreiaError::WindowsError("Failed to remove hidden attribute".to_string()));
+        }
+    }
+    
+    Ok(())
+}
+
+/// Checks if the hidden attribute is set
+pub fn is_hidden(path: &Path) -> bool {
+    let wide_path: Vec<u16> = path.as_os_str()
+        .encode_wide()
+        .chain(std::iter::once(0))
+        .collect();
+
+    unsafe {
+        let attrs = GetFileAttributesW(wide_path.as_ptr());
+        if attrs == INVALID_FILE_ATTRIBUTES {
+            return false;
+        }
+        (attrs & FILE_ATTRIBUTE_HIDDEN) != 0
+    }
+}
+
+/// Returns the path to a known folder
+///
+/// # Arguments
+/// * `folder` - The folder to get the path for - see `FolderID` enum
 pub fn get_path(folder: FolderID) -> AreiaResult<PathBuf> {
     let mut path_ptr: *mut u16 = std::ptr::null_mut();
     let rfid = match folder {
