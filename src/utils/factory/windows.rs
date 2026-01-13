@@ -46,21 +46,21 @@ pub fn preference_dir(home: PathBuf) -> PathBuf {
     data_dir(home)
 }
 
-pub fn font_dir(_home: PathBuf) -> Option<PathBuf> {
+fn font_dir(_home: PathBuf) -> Option<PathBuf> {
     None
 }
 
-pub fn get_usr_dirs<P: Into<PathBuf>>(_home: P) -> AreiaResult<HashMap<String, PathBuf>> {
+pub fn get_usr_dirs<P: Into<PathBuf>>(home: P) -> AreiaResult<HashMap<String, Option<PathBuf>>> {
     let mut out = HashMap::new();
 
-    out.insert("Music".to_string(), get_path(FolderID::Music)?);
-    out.insert("Desktop".to_string(), get_path(FolderID::Desktop)?);
-    out.insert("Document".to_string(), get_path(FolderID::Document)?);
-    out.insert("Download".to_string(), get_path(FolderID::Download)?);
-    out.insert("Picture".to_string(), get_path(FolderID::Picture)?);
-    out.insert("Public".to_string(), get_path(FolderID::Public)?);
-    out.insert("Template".to_string(), get_path(FolderID::Template)?);
-    out.insert("Video".to_string(), get_path(FolderID::Video)?);
-
+    out.insert("MUSIC".to_string(), Some(get_path(FolderID::Music)?));
+    out.insert("DESKTOP".to_string(), Some(get_path(FolderID::Desktop)?));
+    out.insert("DOCUMENTS".to_string(), Some(get_path(FolderID::Document)?));
+    out.insert("DOWNLOADS".to_string(), Some(get_path(FolderID::Download)?));
+    out.insert("PICTURES".to_string(), Some(get_path(FolderID::Picture)?));
+    out.insert("PUBLICSHARE".to_string(), Some(get_path(FolderID::Public)?));
+    out.insert("TEMPLATES".to_string(), Some(get_path(FolderID::Template)?));
+    out.insert("VIDEOS".to_string(), Some(get_path(FolderID::Video)?));
+    out.insert("FONTS".to_string(), Some(font_dir(home.into())?));
     Ok(out)
 }

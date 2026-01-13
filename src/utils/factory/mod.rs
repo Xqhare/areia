@@ -54,6 +54,6 @@ pub fn executable_dir(home: PathBuf) -> Option<PathBuf> {
     os::executable_dir(home)
 }
 
-pub fn get_usr_dirs(home: PathBuf) -> AreiaResult<HashMap<String, PathBuf>> {
+pub fn get_usr_dirs(home: PathBuf) -> AreiaResult<HashMap<String, Option<PathBuf>>> {
     os::get_usr_dirs(home)
 }

@@ -37,19 +37,22 @@ pub fn executable_dir(_home: PathBuf) -> Option<PathBuf> {
 pub fn preference_dir(home: PathBuf) -> PathBuf {
     home.join("Library").join("Preferences")
 }
-pub fn font_dir(home: PathBuf) -> Option<PathBuf> {
+
+fn font_dir(home: PathBuf) -> Option<PathBuf> {
     Some(home.join("Library").join("Fonts"))
 }
 
-pub fn get_usr_dirs<P: Into<PathBuf>>(home: P) -> AreiaResult<HashMap<String, PathBuf>> {
+pub fn get_usr_dirs<P: Into<PathBuf>>(home: P) -> AreiaResult<HashMap<String, Option<PathBuf>>> {
     let home = home.into();
     let mut out = HashMap::new();
-    out.insert("Music".to_owned(), home.join("Music"));
-    out.insert("Desktop".to_owned(), home.join("Desktop"));
-    out.insert("Documents".to_owned(), home.join("Documents"));
-    out.insert("Downloads".to_owned(), home.join("Downloads"));
-    out.insert("Pictures".to_owned(), home.join("Pictures"));
-    out.insert("Public".to_owned(), home.join("Public"));
-    out.insert("Videos".to_owned(), home.join("Movies"));
+    out.insert("MUSIC".to_owned(), Some(home.join("Music")));
+    out.insert("DESKTOP".to_owned(), Some(home.join("Desktop")));
+    out.insert("DOCUMENTS".to_owned(), Some(home.join("Documents")));
+    out.insert("DOWNLOADS".to_owned(), Some(home.join("Downloads")));
+    out.insert("PICTURES".to_owned(), Some(home.join("Pictures")));
+    out.insert("PUBLICSHARE".to_owned(), Some(home.join("Public")));
+    out.insert("VIDEOS".to_owned(), Some(home.join("Movies")));
+    out.insert("FONTS".to_owned(), font_dir(home));
+    out.insert("TEMPLATES".to_owned(), None);
     Ok(out)
 }
