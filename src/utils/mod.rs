@@ -25,6 +25,7 @@ pub trait Hidden {
     fn unhide(&mut self) -> AreiaResult<()>;
 }
 
+// Would it make more sense to implement this for `File` instead?
 impl Hidden for PathBuf {
     /// Returns true if the path is hidden
     ///
