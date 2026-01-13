@@ -4,6 +4,9 @@ use std::path::PathBuf;
 #[test]
 fn create_new_user() {
     let new_user = UserDirs::new();
+    if new_user.is_err() {
+        println!("{:?}", new_user);
+    }
     assert!(new_user.is_ok());
 }
 
@@ -83,7 +86,7 @@ fn all_paths_present() {
 }
 
 #[test]
-#[cfg(target_os = "macos")]
+#[cfg(target_os = "windows")]
 fn all_paths_present() {
     let user = UserDirs::new();
     assert!(user.is_ok());
