@@ -1,6 +1,6 @@
 use std::ffi::{c_void, OsString};
 use std::path::PathBuf;
-use std::os::unix::ffi::OsStrExt;
+use std::os::unix::ffi::OsStringExt;
 
 type CFRef = *const c_void;
 type CFURLRef = CFRef;

@@ -61,6 +61,6 @@ pub fn get_usr_dirs<P: Into<PathBuf>>(home: P) -> AreiaResult<HashMap<String, Op
     out.insert("PUBLICSHARE".to_string(), Some(get_path(FolderID::Public)?));
     out.insert("TEMPLATES".to_string(), Some(get_path(FolderID::Template)?));
     out.insert("VIDEOS".to_string(), Some(get_path(FolderID::Video)?));
-    out.insert("FONTS".to_string(), Some(font_dir(home.into())?));
+    out.insert("FONTS".to_string(), font_dir(home.into()));
     Ok(out)
 }

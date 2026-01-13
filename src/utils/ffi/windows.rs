@@ -1,4 +1,4 @@
-use std::{ffi::{c_void, OsString}, fmt::Display, path::PathBuf};
+use std::{ffi::{c_void, OsString}, fmt::Display, path::PathBuf, os::windows::ffi::OsStringExt};
 
 use crate::error::{AreiaError, AreiaResult};
 
