@@ -56,11 +56,11 @@ pub fn get_usr_dirs<P: Into<PathBuf>>(home: P) -> AreiaResult<HashMap<String, Op
     out.insert("MUSIC".to_string(), Some(get_path(FolderID::Music)?));
     out.insert("DESKTOP".to_string(), Some(get_path(FolderID::Desktop)?));
     out.insert("DOCUMENTS".to_string(), Some(get_path(FolderID::Document)?));
-    out.insert("DOWNLOADS".to_string(), Some(get_path(FolderID::Download)?));
     out.insert("PICTURES".to_string(), Some(get_path(FolderID::Picture)?));
     out.insert("PUBLICSHARE".to_string(), Some(get_path(FolderID::Public)?));
     out.insert("TEMPLATES".to_string(), Some(get_path(FolderID::Template)?));
     out.insert("VIDEOS".to_string(), Some(get_path(FolderID::Video)?));
     out.insert("FONTS".to_string(), font_dir(home.into()));
+    out.insert("DOWNLOADS".to_string(), Some(get_path(FolderID::Download)?));
     Ok(out)
 }
