@@ -19,6 +19,7 @@ pub fn get_home() -> AreiaResult<PathBuf> {
     os::get_home()
 }
 
+/// only handles unix dotfiles
 pub fn is_component_hidden(path: &OsStr) -> bool {
-    todo!()
+    path.to_str().expect("Unix path is valid UTF-8 by convention").starts_with(".")
 }

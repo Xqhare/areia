@@ -23,5 +23,3 @@ pub fn get_home() -> AreiaResult<std::path::PathBuf> {
     }
 }
 
-pub fn is_hidden(path: &PathBuf) -> bool {
-}
