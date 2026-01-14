@@ -59,3 +59,19 @@ pub fn is_existent_path<P: Into<PathBuf>>(path: P) -> Option<PathBuf> {
         None
     }
 }
+
+pub fn hide_file(path: &PathBuf) -> AreiaResult<PathBuf> {
+    let mut path = path.clone();
+    path.set_file_name(format!(".{}", path.file_name().unwrap().to_str().expect("Unix path is valid UTF-8 by convention")));
+    Ok(path)
+}
+
+pub fn unhide_file(path: &PathBuf) -> AreiaResult<PathBuf> {
+    let mut path = path.clone();
+    path.set_file_name(path.clone().strip_prefix(".").unwrap());
+    Ok(path)
+}
+
+pub fn is_dotfile_hidden(path: &PathBuf) -> bool {
+    path.file_name().unwrap().to_str().unwrap().starts_with(".")
+}
