@@ -46,3 +46,5 @@ pub fn get_mac_home_fallback() -> Option<PathBuf> {
         }
     }
 }
+
+// Code for hiding here
