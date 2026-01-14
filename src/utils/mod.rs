@@ -4,13 +4,13 @@ use std::{ffi::OsStr, path::PathBuf};
 
 pub mod factory;
 
-#[cfg(any(target_os = "linux", target_os = "macos", doc))]
+#[cfg(any(unix, doc))]
 mod unix;
 
-#[cfg(any(target_os = "linux", target_os = "macos"))]
+#[cfg(unix)]
 use unix as os;
 
-#[cfg(any(target_os = "windows", doc))]
+#[cfg(any(target_os = "windows", all(target_os = "windows", doc)))]
 mod windows;
 #[cfg(target_os = "windows")]
 use windows as os;

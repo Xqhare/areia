@@ -1,15 +1,15 @@
 
-#[cfg(any(target_os = "windows", doc))]
+#[cfg(any(target_os = "windows", all(target_os = "windows", doc)))]
 mod windows;
 #[cfg(target_os = "windows")]
 use windows as os;
 
-#[cfg(any(target_os = "macos", doc))]
+#[cfg(any(target_os = "macos", all(target_os = "macos", doc)))]
 mod macos;
 #[cfg(target_os = "macos")]
 use macos as os;
 
-#[cfg(any(target_os = "linux", doc))]
+#[cfg(any(target_os = "linux", all(target_os = "linux", doc)))]
 mod linux;
 #[cfg(target_os = "linux")]
 use linux as os;
