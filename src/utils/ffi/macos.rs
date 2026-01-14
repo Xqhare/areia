@@ -1,6 +1,6 @@
 use std::ffi::{c_void, OsString, CString};
 use std::path::{PathBuf, Path};
-use std::os::unix::ffi::OsStringExt;
+use std::os::unix::ffi::{OsStringExt, OsStrExt};
 
 use crate::error::{AreiaError, AreiaResult};
 
