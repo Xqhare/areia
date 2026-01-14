@@ -4,9 +4,10 @@ use std::path::PathBuf;
 
 pub use dirs::{BaseDirs, UserDirs};
 use error::AreiaResult;
+#[cfg(unix)]
 use utils::is_component_hidden;
 #[cfg(target_os = "windows")]
-use utils::windows;
+use utils::is_windows_hidden;
 
 pub mod error;
 
@@ -44,7 +45,7 @@ impl Hidden for PathBuf {
         if self.exists() {
             // `is_hidden` may return an os error - while returning false is suboptimal
             // I really don't want to `Result` the return value here
-            windows::is_hidden(&self).unwrap_or(false)
+            is_windows_hidden(&self).unwrap_or(false)
         } else {
             false
         }

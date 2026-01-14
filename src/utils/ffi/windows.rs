@@ -285,17 +285,18 @@ pub fn get_path(folder: FolderID) -> AreiaResult<PathBuf> {
 /// Takes a path and returns the wide path needed for the Windows API
 ///
 /// Returns the wide path as `.0` and the file attributes as `.1`
-unsafe fn wide_path(path: &Path) -> AreiaResult<(Vec<u16>, u32)> {
-    let wide_path: Vec<u16> = path.as_os_str()
-        .encode_wide()
-        .chain(std::iter::once(0))
-        .collect();
-    let attrs = GetFileAttributesW(wide_path.as_ptr());
-    if attrs == INVALID_FILE_ATTRIBUTES {
-        let err = std::io::Error::last_os_error();
-        let t: std::io::Error = err;
-        return Err(AreiaError::WindowsIoError(err));
-    }
+fn wide_path(path: &Path) -> AreiaResult<(Vec<u16>, u32)> {
+    unsafe {
+        let wide_path: Vec<u16> = path.as_os_str()
+            .encode_wide()
+            .chain(std::iter::once(0))
+            .collect();
+        let attrs = GetFileAttributesW(wide_path.as_ptr());
+        if attrs == INVALID_FILE_ATTRIBUTES {
+            let err = std::io::Error::last_os_error();
+            return Err(AreiaError::WindowsIoError(err));
+        }
 
-    Ok((wide_path, attrs))
+        Ok((wide_path, attrs))
+    }
 }

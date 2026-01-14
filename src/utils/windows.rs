@@ -11,7 +11,7 @@ use super::ffi::windows;
 /// # Returns
 /// `Ok(path)` if the home directory could be found
 /// `Err(AreiaError::CantGetHomeDir)` if the home directory could not be found
-pub fn get_home() -> AreiaResult<std::path::PathBuf> {
+pub fn get_home() -> AreiaResult<PathBuf> {
     if let Ok(path) = windows::get_path(windows::FolderID::Profile) {
         Ok(path)
     } else { 
@@ -23,3 +23,6 @@ pub fn get_home() -> AreiaResult<std::path::PathBuf> {
     }
 }
 
+pub fn is_windows_hidden(path: &PathBuf) -> bool {
+    windows::is_hidden(path)
+}

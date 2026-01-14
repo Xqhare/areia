@@ -14,6 +14,8 @@ use unix as os;
 mod windows;
 #[cfg(target_os = "windows")]
 use windows as os;
+#[cfg(target_os = "windows")]
+pub use windows::is_windows_hidden;
 
 pub fn get_home() -> AreiaResult<PathBuf> {
     os::get_home()
@@ -23,3 +25,4 @@ pub fn get_home() -> AreiaResult<PathBuf> {
 pub fn is_component_hidden(path: &OsStr) -> bool {
     path.to_str().expect("Unix path is valid UTF-8 by convention").starts_with(".")
 }
+
