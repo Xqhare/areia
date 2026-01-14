@@ -23,6 +23,6 @@ pub fn get_home() -> AreiaResult<PathBuf> {
     }
 }
 
-pub fn is_windows_hidden(path: &PathBuf) -> bool {
+pub fn is_windows_hidden(path: &PathBuf) -> AreiaResult<bool> {
     windows::is_hidden(path)
 }

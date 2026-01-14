@@ -230,19 +230,15 @@ pub fn unhide(path: &Path) -> AreiaResult<()> {
 /// Checks if the hidden attribute is set
 pub fn is_hidden(path: &Path) -> AreiaResult<bool> {
     // All checks are done in `wide_path`
-    unsafe {
-        let (_, attrs) = wide_path(path)?;
-        Ok((attrs & FILE_ATTRIBUTE_HIDDEN) != 0)
-    }
+    let (_, attrs) = wide_path(path)?;
+    Ok((attrs & FILE_ATTRIBUTE_HIDDEN) != 0)
 }
 
 /// Checks if the hidden and system attribute is set
 pub fn is_super_hidden(path: &Path) -> AreiaResult<bool> {
     // All checks are done in `wide_path`
-    unsafe {
-        let (_, attrs) = wide_path(path)?;
-        Ok((attrs & FILE_ATTRIBUTE_HIDDEN) != 0 && (attrs & FILE_ATTRIBUTE_SYSTEM) != 0)
-    }
+    let (_, attrs) = wide_path(path)?;
+    Ok((attrs & FILE_ATTRIBUTE_HIDDEN) != 0 && (attrs & FILE_ATTRIBUTE_SYSTEM) != 0)
 }
 
 /// Returns the path to a known folder
