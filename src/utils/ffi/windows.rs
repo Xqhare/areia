@@ -149,40 +149,27 @@ unsafe extern "system" {
 
 /// Sets the hidden attribute for a file or directory and keeps any existing attributes
 pub fn hide(path: &Path) -> AreiaResult<()> {
-    let wide_path: Vec<u16> = path.as_os_str()
-        .encode_wide()
-        .chain(std::iter::once(0))
-        .collect();
 
     unsafe {
-        let attrs = GetFileAttributesW(wide_path.as_ptr());
-        if attrs == INVALID_FILE_ATTRIBUTES {
-            return Err(AreiaError::WindowsError("Failed to get attributes for hiding".to_string()));
-        }
+        let (wide_path, attrs) = wide_path(path)?;
 
         let mut new_attrs = attrs | FILE_ATTRIBUTE_HIDDEN;
         new_attrs &= !FILE_ATTRIBUTE_NORMAL;
 
         let result = SetFileAttributesW(wide_path.as_ptr(), new_attrs);
         if result == 0 {
-            return Err(AreiaError::WindowsError("Failed to set hidden attribute".to_string()));
+            let err = std::io::Error::last_os_error();
+            return Err(AreiaError::WindowsError(format!("Failed to set hidden attribute: {}", err)));
         }
     }
     
     Ok(())
 }
 
-pub fn superhide(path: &Path) -> AreiaResult<()> {
-    let wide_path: Vec<u16> = path.as_os_str()
-        .encode_wide()
-        .chain(std::iter::once(0))
-        .collect();
+pub fn super_hide(path: &Path) -> AreiaResult<()> {
 
     unsafe {
-        let attrs = GetFileAttributesW(wide_path.as_ptr());
-        if attrs == INVALID_FILE_ATTRIBUTES {
-            return Err(AreiaError::WindowsError("Failed to get attributes for super hiding".to_string()));
-        }
+        let (wide_path, attrs) = wide_path(path)?;
 
         let mut new_attrs = attrs | FILE_ATTRIBUTE_HIDDEN;
         new_attrs |= FILE_ATTRIBUTE_SYSTEM;
@@ -190,7 +177,8 @@ pub fn superhide(path: &Path) -> AreiaResult<()> {
 
         let result = SetFileAttributesW(wide_path.as_ptr(), new_attrs);
         if result == 0 {
-            return Err(AreiaError::WindowsError("Failed to set super hidden attributes".to_string()));
+            let err = std::io::Error::last_os_error();
+            return Err(AreiaError::WindowsError(format!("Failed to set super hidden attributes: {}", err)));
         }
     }
     
@@ -198,17 +186,10 @@ pub fn superhide(path: &Path) -> AreiaResult<()> {
 }
 
 /// Removes the hidden attribute for a file or directory and keeps any existing attributes
-pub fn un_superhide(path: &Path) -> AreiaResult<()> {
-    let wide_path: Vec<u16> = path.as_os_str()
-        .encode_wide()
-        .chain(std::iter::once(0))
-        .collect();
+pub fn super_unhide(path: &Path) -> AreiaResult<()> {
 
     unsafe {
-        let attrs = GetFileAttributesW(wide_path.as_ptr());
-        if attrs == INVALID_FILE_ATTRIBUTES {
-            return Err(AreiaError::WindowsError("Failed to get attributes for unhiding".to_string()));
-        }
+        let (wide_path, attrs) = wide_path(path)?;
 
         let mut new_attrs = attrs & !FILE_ATTRIBUTE_HIDDEN;
         new_attrs &= !FILE_ATTRIBUTE_SYSTEM;
@@ -218,7 +199,8 @@ pub fn un_superhide(path: &Path) -> AreiaResult<()> {
 
         let result = SetFileAttributesW(wide_path.as_ptr(), new_attrs);
         if result == 0 {
-            return Err(AreiaError::WindowsError("Failed to remove hidden attribute".to_string()));
+            let err = std::io::Error::last_os_error();
+            return Err(AreiaError::WindowsError(format!("Failed to remove super hidden attributes: {}", err)));
         }
     }
     
@@ -226,17 +208,9 @@ pub fn un_superhide(path: &Path) -> AreiaResult<()> {
 }
 
 /// Removes the hidden attribute for a file or directory and keeps any existing attributes
-pub fn un_hide(path: &Path) -> AreiaResult<()> {
-    let wide_path: Vec<u16> = path.as_os_str()
-        .encode_wide()
-        .chain(std::iter::once(0))
-        .collect();
-
+pub fn unhide(path: &Path) -> AreiaResult<()> {
     unsafe {
-        let attrs = GetFileAttributesW(wide_path.as_ptr());
-        if attrs == INVALID_FILE_ATTRIBUTES {
-            return Err(AreiaError::WindowsError("Failed to get attributes for unhiding".to_string()));
-        }
+        let (wide_path, attrs) = wide_path(path)?;
 
         let mut new_attrs = attrs & !FILE_ATTRIBUTE_HIDDEN;
         if new_attrs == 0 {
@@ -245,7 +219,8 @@ pub fn un_hide(path: &Path) -> AreiaResult<()> {
 
         let result = SetFileAttributesW(wide_path.as_ptr(), new_attrs);
         if result == 0 {
-            return Err(AreiaError::WindowsError("Failed to remove hidden attribute".to_string()));
+            let err = std::io::Error::last_os_error();
+            return Err(AreiaError::WindowsError(format!("Failed to remove hidden attribute: {}", err)));
         }
     }
     
@@ -253,18 +228,11 @@ pub fn un_hide(path: &Path) -> AreiaResult<()> {
 }
 
 /// Checks if the hidden attribute is set
-pub fn is_hidden(path: &Path) -> bool {
-    let wide_path: Vec<u16> = path.as_os_str()
-        .encode_wide()
-        .chain(std::iter::once(0))
-        .collect();
-
+pub fn is_hidden(path: &Path) -> AreiaResult<bool> {
+    // All checks are done in `wide_path`
     unsafe {
-        let attrs = GetFileAttributesW(wide_path.as_ptr());
-        if attrs == INVALID_FILE_ATTRIBUTES {
-            return false;
-        }
-        (attrs & FILE_ATTRIBUTE_HIDDEN) != 0
+        let (_, attrs) = wide_path(path)?;
+        Ok((attrs & FILE_ATTRIBUTE_HIDDEN) != 0)
     }
 }
 
@@ -300,7 +268,25 @@ pub fn get_path(folder: FolderID) -> AreiaResult<PathBuf> {
             Ok(path)
         }
     } else {
-        Err(AreiaError::WindowsError(format!("{}", folder)))
+        Err(AreiaError::WindowsError(format!("Failed to get {}. HRESULT: 0x{:x}", folder, result)))
     }
 
+}
+
+/// Takes a path and returns the wide path needed for the Windows API
+///
+/// Returns the wide path as `.0` and the file attributes as `.1`
+unsafe fn wide_path(path: &Path) -> AreiaResult<(Vec<u16>, u32)> {
+    let wide_path: Vec<u16> = path.as_os_str()
+        .encode_wide()
+        .chain(std::iter::once(0))
+        .collect();
+    let attrs = GetFileAttributesW(wide_path.as_ptr());
+    if attrs == INVALID_FILE_ATTRIBUTES {
+        let err = std::io::Error::last_os_error();
+        let t: std::io::Error = err;
+        return Err(AreiaError::WindowsIoError(err));
+    }
+
+    Ok((wide_path, attrs))
 }
