@@ -4,13 +4,13 @@ use std::{ffi::OsStr, path::PathBuf};
 
 pub mod factory;
 
-#[cfg(any(target_os = "linux", target_os = "macos"))]
+#[cfg(any(target_os = "linux", target_os = "macos", doc))]
 mod unix;
 
 #[cfg(any(target_os = "linux", target_os = "macos"))]
 use unix as os;
 
-#[cfg(target_os = "windows")]
+#[cfg(any(target_os = "windows", doc))]
 mod windows;
 #[cfg(target_os = "windows")]
 use windows as os;
@@ -51,5 +51,5 @@ impl Hidden for PathBuf {
 }
 
 fn is_component_hidden(path: &OsStr) -> bool {
-    todo!(())
+    todo!()
 }

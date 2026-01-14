@@ -1,9 +1,8 @@
-
-#[cfg(target_os = "macos")]
+#[cfg(any(target_os = "macos", doc))]
 pub mod macos;
 
-#[cfg(unix)]
+#[cfg(any(unix, doc))]
 pub mod unix;
 
-#[cfg(target_os = "windows")]
+#[cfg(any(target_os = "windows", doc))]
 pub mod windows;
