@@ -1,6 +1,6 @@
 mod ffi;
 use crate::error::AreiaResult;
-use std::{ffi::OsStr, path::PathBuf};
+use std::path::PathBuf;
 
 pub mod factory;
 
@@ -9,6 +9,8 @@ mod unix;
 
 #[cfg(unix)]
 use unix as os;
+#[cfg(unix)]
+pub use unix::is_any_component_hidden;
 
 #[cfg(any(target_os = "windows", all(target_os = "windows", doc)))]
 mod windows;
@@ -21,8 +23,14 @@ pub fn get_home() -> AreiaResult<PathBuf> {
     os::get_home()
 }
 
-/// only handles unix dotfiles
-pub fn is_component_hidden(path: &OsStr) -> bool {
-    path.to_str().expect("Unix path is valid UTF-8 by convention").starts_with(".")
+pub fn hide_path(path: &mut PathBuf) -> AreiaResult<PathBuf> {
+    os::hide_file(path)
 }
 
+pub fn unhide_path(path: &mut PathBuf) -> AreiaResult<PathBuf> {
+    os::unhide_file(path)
+}
+
+pub fn is_hidden(path: &PathBuf) -> bool {
+    os::is_any_component_hidden(path)
+}
