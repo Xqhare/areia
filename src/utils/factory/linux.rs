@@ -1,13 +1,13 @@
 use std::{collections::HashMap, env, ffi::OsString, fs::File, io::Read, os::unix::ffi::OsStringExt, path::PathBuf};
 
-use crate::{error::{AreiaError, AreiaResult}, utils::unix::{is_absolute_path, is_existent_path}};
+use crate::{error::{AreiaError, AreiaResult}, utils::unix::is_absolute_path};
 
 pub fn cache_dir(home: PathBuf) -> PathBuf {
     if let Some(path) = env::var_os("XDG_CACHE_HOME").and_then(|x| is_absolute_path(x)) {
         path
     } else {
-        if let Some(path) = is_existent_path(home.join(".cache")) {
-            path
+        if home.join(".cache").exists() {
+            home.join(".cache")
         } else {
             // Judging by the `directories` source code, `home.join` should always return a valid path
             unreachable!("Cache directory could not be found!");
@@ -19,8 +19,8 @@ pub fn config_dir(home: PathBuf) -> PathBuf {
     if let Some(path) = env::var_os("XDG_CONFIG_HOME").and_then(|x| is_absolute_path(x)) {
         path
     } else {
-        if let Some(path) = is_existent_path(home.join(".config")) {
-            path
+        if home.join(".config").exists() {
+            home.join(".config")
         } else {
             // Judging by the `directories` source code, `home.join` should always return a valid path
             unreachable!("Config directory could not be found!");
@@ -44,8 +44,8 @@ pub fn data_dir(home: PathBuf) -> PathBuf {
     if let Some(path) = env::var_os("XDG_DATA_HOME").and_then(|x| is_absolute_path(x)) {
         path
     } else {
-        if let Some(path) = is_existent_path(home.join(".local/share")) {
-            path
+        if home.join(".local/share").exists() {
+            home.join(".local/share")
         } else {
             // Judging by the `directories` source code, `home.join` should always return a valid path
             unreachable!("Data directory could not be found!");
@@ -61,8 +61,8 @@ pub fn state_dir(home: PathBuf) -> Option<PathBuf> {
     if let Some(path) = env::var_os("XDG_STATE_HOME").and_then(|x| is_absolute_path(x)) {
         Some(path)
     } else {
-        if let Some(path) = is_existent_path(home.join(".local/state")) {
-            Some(path)
+        if home.join(".local/state").exists() {
+            Some(home.join(".local/state"))
         } else {
             // Judging by the `directories` source code, `home.join` should always return a valid path
             unreachable!("State directory could not be found!");
@@ -74,8 +74,8 @@ pub fn executable_dir(home: PathBuf) -> Option<PathBuf> {
     if let Some(path) = env::var_os("XDG_BIN_HOME").and_then(|x| is_absolute_path(x)) {
         Some(path)
     } else {
-        if let Some(path) = is_existent_path(home.join(".local/bin")) {
-            Some(path)
+        if home.join(".local/bin").exists() {
+            Some(home.join(".local/bin"))
         } else {
             // Judging by the `directories` source code, `home.join` should always return a valid path
             unreachable!("Executable directory could not be found!");
@@ -83,7 +83,13 @@ pub fn executable_dir(home: PathBuf) -> Option<PathBuf> {
     }
 }
 
-fn font_dir(home: PathBuf) -> Option<PathBuf> { is_existent_path(home.join(".local/share/fonts")) }
+fn font_dir(home: PathBuf) -> Option<PathBuf> { 
+    if home.join(".local/share/fonts").exists() {
+        Some(home.join(".local/share/fonts"))
+    } else {
+        None
+    }
+}
 
 pub fn get_usr_dirs<P: Into<PathBuf>>(home: P) -> AreiaResult<HashMap<String, Option<PathBuf>>> {
     let home = home.into();
