@@ -4,10 +4,12 @@ pub type AreiaResult<T> = Result<T, AreiaError>;
 
 type WinErrString = String;
 type MacErrString = String;
+type Reason = String;
 
 #[derive(Debug)]
 pub enum AreiaError {
     CantGetHomeDir,
+    SuperHidingNotSupported(Reason),
     IoError(std::io::Error),
     WindowsError(WinErrString),
     WindowsIoError(std::io::Error),
@@ -26,6 +28,7 @@ impl std::fmt::Display for AreiaError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             AreiaError::CantGetHomeDir => write!(f, "Can't get home directory"),
+            AreiaError::SuperHidingNotSupported(reason) => write!(f, "Super hiding not supported. Reason: {}", reason),
             AreiaError::IoError(err) => write!(f, "IO error: {}", err),
             AreiaError::WindowsError(err) => write!(f, "Windows error. \n Unable to get: {}", err),
             AreiaError::WindowsIoError(err) => write!(f, "Windows IO error: {}", err),
