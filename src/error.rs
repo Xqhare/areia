@@ -10,6 +10,7 @@ type Reason = String;
 pub enum AreiaError {
     CantGetHomeDir,
     SuperHidingNotSupported(Reason),
+    SuperHidingRequiresExistingPath(PathBuf),
     IoError(std::io::Error),
     WindowsError(WinErrString),
     WindowsIoError(std::io::Error),
@@ -29,6 +30,7 @@ impl std::fmt::Display for AreiaError {
         match self {
             AreiaError::CantGetHomeDir => write!(f, "Can't get home directory"),
             AreiaError::SuperHidingNotSupported(reason) => write!(f, "Super hiding not supported. Reason: {}", reason),
+            AreiaError::SuperHidingRequiresExistingPath(path) => write!(f, "Super hiding requires an existing path (either file or directory): {:?}", path),
             AreiaError::IoError(err) => write!(f, "IO error: {}", err),
             AreiaError::WindowsError(err) => write!(f, "Windows error. \n Unable to get: {}", err),
             AreiaError::WindowsIoError(err) => write!(f, "Windows IO error: {}", err),

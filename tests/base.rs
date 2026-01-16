@@ -1,5 +1,6 @@
 use areia::BaseDirs;
 use std::path::PathBuf;
+use areia::Hidden;
 
 #[test]
 fn create_new_base() {
