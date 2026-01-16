@@ -68,21 +68,23 @@ All mayor Operating Systems (Windows, Linux, MacOS) are supported.
         - [x] Linux
         - [x] MacOS
 - [ ] Stable Features
+    - [x] Basic Hiding
     - [x] Atomic "Hide-and-Move"
-    - [ ] Ownership & Permissions (Unix-only)
-- [ ] Nice-to-Haves
     - [ ] Super Hiding
-        - [ ] MacOS Hybrid Support
-        - [ ] Windows "System" Flag
+        - [x] MacOS Hybrid Support
+        - [x] Windows "System" Flag
+- [ ] Nice-to-Haves
     - [ ] Directory "Auto-Creator"
     - [ ] Directory "Auto-Deletor"
-- [ ] Support system level directories (maybe - after 1.0.0)
-    - [ ] Windows
-        - [ ] ProgramFiles
-    - [ ] Unix
-        - [ ] Root Bin
-        - [ ] Root Data
-        - [ ] Root Config
+- [ ] after 1.0.0
+    - [ ] `dotfile` path maker (No automatic file creation)
+    - [ ] Support system level directories (maybe)
+        - [ ] Windows
+            - [ ] ProgramFiles
+        - [ ] Unix
+            - [ ] Root Bin
+            - [ ] Root Data
+            - [ ] Root Config
 
 ## Project Design (Can be deleted after 1.0.0)
 
@@ -148,60 +150,24 @@ that have been defined according to the conventions of the operating system the 
 | `template_dir`   | `Some(XDG_TEMPLATES_DIR)`       or `None`                              | `Some({FOLDERID_Templates})`     | `None`                         | 
 | `video_dir`      | `Some(XDG_VIDEOS_DIR)`          or `None`                              | `Some({FOLDERID_Videos})`        | `Some($HOME`/Movies/`)`        |
 
-### 1. The "Must-Haves" (Core Functionality)
-
-These are the foundational pieces required to make the crate functional across Windows, Linux, and macOS.
-
-- Internal Path Syncing:
-    - An API that returns a PathBuf after a "hide" operation, forcing the developer to update their stored state (since the path changes on Unix).
-- Environment Variable Resolution:
-    - Implementing a fallback chain for paths (e.g., Check $XDG_CONFIG_HOME, if empty, check $HOME and append /.config).
-    - Mechanism: Use std::env::var.
-- Platform-Specific "Hide" Implementation:
-    - Windows: FFI for SetFileAttributesW (Metadata approach).
-    - Unix/macOS: Filename manipulation (Dot-prefix approach).
-    - Ensure that only the root of the path is hidden.
-
 ### 2. The "Stable Architecture" Features
-
-These features move the crate from a "script" to a "library" by handling edge cases and providing safety.
 
 - Atomic "Hide-and-Move":
     - A function that handles moving an existing visible directory to a hidden path while ensuring data isn't lost if the process is interrupted.
-- Ownership & Permissions (Unix-only):
-    - When creating a config dir, it should use std::os::unix::fs::PermissionsExt to set the mode to 0o700 (private). This ensures that while the file is hidden from the UI, it is also protected from other users on the system.
-
-### 3. The "Nice-to-Haves" (Professional Polish)
-
-These features make the crate feel like a high-quality, "native" experience for the end user.
-
 - Super Hiding:
     - macOS Hybrid Support:
         - Adding an FFI call for chflags to set UF_HIDDEN. This makes the dotfile even more hidden on macOS (it won't show up in certain GUI search tools).
     - Windows "System" Flag:
         - Optionally adding FILE_ATTRIBUTE_SYSTEM (0x4) along with the Hidden flag. This makes the file/folder even harder to see in Windows Explorer (requires unchecking "Hide protected operating system files").
+
+### 3. The "Nice-to-Haves" (Professional Polish)
+
 - Directory "Auto-Creator":
     - A function that runs fs::create_dir_all on a given path.
     - Also inverse "Auto-Deleter"
     - A convenience function - just pass in whatever path areia constructs.
-
-### Possible Project Suructure
-
-```
-areia/
-├── Cargo.toml
-└── src/
-    ├── lib.rs            // The public API (AppDir, Config locations)
-    ├── error.rs          // Custom error types (optional but good practice)
-    ├── platform/         // The engine room
-    │   ├── mod.rs        // Dispatches to unix.rs or windows.rs based on cfg
-    │   ├── unix.rs       // Dotfile logic + File Permissions (0o700)
-    │   ├── macos.rs      // (Optional) Specific tweaks if you go beyond unix defaults
-    │   └── windows.rs    // FFI calls to kernel32.dll + Attribute logic
-    └── utils/            // Helpers (Path sanitization, env var fallbacks)
-        ├── mod.rs
-        ├── unix.rs       // Unix-specific helpers and fallbacks
-        ├── macos.rs      // macOS-specific helpers and fallbacks
-        └── windows.rs    // Windows-specific helpers and fallbacks
-```
+    - Also creates the file if it doesn't exist.
+- Directory "Auto-Deletor":
+    - A function that runs fs::remove_dir_all on a given path.
+    - Deletes all files inside the directories if any exists.
 
