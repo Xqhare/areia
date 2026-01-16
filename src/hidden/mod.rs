@@ -11,7 +11,7 @@ pub trait Hidden {
 }
 
 pub trait SuperHidden {
-    fn is_super_hidden(&self) -> bool;
+    fn is_super_hidden(&self) -> AreiaResult<bool>;
     fn super_hide(&mut self) -> AreiaResult<PathBuf>;
     fn super_unhide(&mut self) -> AreiaResult<PathBuf>;
 }
