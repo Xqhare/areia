@@ -9,15 +9,11 @@ mod unix;
 
 #[cfg(unix)]
 use unix as os;
-#[cfg(unix)]
-pub use unix::is_any_component_hidden;
 
 #[cfg(any(target_os = "windows", all(target_os = "windows", doc)))]
 mod windows;
 #[cfg(target_os = "windows")]
 use windows as os;
-#[cfg(target_os = "windows")]
-pub use windows::is_windows_hidden;
 
 pub fn get_home() -> AreiaResult<PathBuf> {
     os::get_home()
