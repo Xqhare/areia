@@ -10,7 +10,7 @@ All mayor Operating Systems (Windows, Linux, MacOS) are supported.
 
 ## Roadmap
 
-- [ ] Core Functionality
+- [x] Core Functionality
     - [x] Environment Variable Resolution
         - [x] Linux
             - [x] Home
@@ -68,16 +68,14 @@ All mayor Operating Systems (Windows, Linux, MacOS) are supported.
         - [x] Linux
         - [x] MacOS
 - [ ] Stable Features
-    - [ ] Atomic "Hide-and-Move"
-    - [ ] The "Double-Search" Discovery
+    - [x] Atomic "Hide-and-Move"
     - [ ] Ownership & Permissions (Unix-only)
 - [ ] Nice-to-Haves
-    - [ ] MacOS Hybrid Support
-    - [ ] Windows "System" Flag
-    - [ ] Redaction/Privacy Helpers
+    - [ ] Super Hiding
+        - [ ] MacOS Hybrid Support
+        - [ ] Windows "System" Flag
     - [ ] Directory "Auto-Creator"
     - [ ] Directory "Auto-Deletor"
-    - [ ] Path "Normalizer"
 - [ ] Support system level directories (maybe - after 1.0.0)
     - [ ] Windows
         - [ ] ProgramFiles
@@ -170,8 +168,6 @@ These features move the crate from a "script" to a "library" by handling edge ca
 
 - Atomic "Hide-and-Move":
     - A function that handles moving an existing visible directory to a hidden path while ensuring data isn't lost if the process is interrupted.
-- The "Double-Search" Discovery:
-    - A method that looks for both the visible and hidden versions of a file/dir and returns the one that contains data (preferring the hidden one).
 - Ownership & Permissions (Unix-only):
     - When creating a config dir, it should use std::os::unix::fs::PermissionsExt to set the mode to 0o700 (private). This ensures that while the file is hidden from the UI, it is also protected from other users on the system.
 
@@ -179,28 +175,16 @@ These features move the crate from a "script" to a "library" by handling edge ca
 
 These features make the crate feel like a high-quality, "native" experience for the end user.
 
-- macOS Hybrid Support:
-    - Adding an FFI call for chflags to set UF_HIDDEN. This makes the dotfile even more hidden on macOS (it won't show up in certain GUI search tools).
-- Windows "System" Flag:
-    - Optionally adding FILE_ATTRIBUTE_SYSTEM (0x4) along with the Hidden flag. This makes the file/folder even harder to see in Windows Explorer (requires unchecking "Hide protected operating system files").
-- Redaction/Privacy Helpers:
-    - A utility that takes a Path and returns a "Safe for Logs" string (e.g., converting /home/user/.myapp to ~/.myapp) to prevent users from accidentally leaking their username in log files.
+- Super Hiding:
+    - macOS Hybrid Support:
+        - Adding an FFI call for chflags to set UF_HIDDEN. This makes the dotfile even more hidden on macOS (it won't show up in certain GUI search tools).
+    - Windows "System" Flag:
+        - Optionally adding FILE_ATTRIBUTE_SYSTEM (0x4) along with the Hidden flag. This makes the file/folder even harder to see in Windows Explorer (requires unchecking "Hide protected operating system files").
 - Directory "Auto-Creator":
     - A function that runs fs::create_dir_all on a given path.
     - Also inverse "Auto-Deleter"
     - A convenience function - just pass in whatever path areia constructs.
-- Path "Normalizer":
-    - A utility to ensure that if a user provides "My App Name", it is converted to a filesystem-safe format (e.g., my_app_name or my-app-name) to avoid issues with spaces or special characters in CLI environments.
-    - This needs to be bundled into any `.new()` functions and can be publicly exposed for convenience.
 
-### List of needed FFI Functions:
-
-To keep it zero-dependency, I need to write these:
-
-- Windows: GetFileAttributesW, SetFileAttributesW.
-- Unix (Optional): chmod (if you want to bypass std::fs for more control).
-- macOS (Optional): chflags.
-    
 ### Possible Project Suructure
 
 ```
