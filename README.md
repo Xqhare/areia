@@ -63,10 +63,10 @@ All mayor Operating Systems (Windows, Linux, MacOS) are supported.
             - [x] Public
             - [x] Template
             - [x] Video
-    - [ ] Platform-Specific "Hide" Implementation
-        - [ ] Windows
-        - [ ] Linux
-        - [ ] MacOS
+    - [x] Platform-Specific "Hide" Implementation
+        - [x] Windows
+        - [x] Linux
+        - [x] MacOS
 - [ ] Stable Features
     - [ ] Atomic "Hide-and-Move"
     - [ ] The "Double-Search" Discovery
