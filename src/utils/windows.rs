@@ -23,6 +23,7 @@ pub fn get_home() -> AreiaResult<PathBuf> {
     }
 }
 
-pub fn is_windows_hidden(path: &PathBuf) -> AreiaResult<bool> {
+/// Checks only the file pointed to, not the entire path like with unix
+pub fn is_any_component_hidden(path: &PathBuf) -> AreiaResult<bool> {
     windows::is_hidden(path)
 }
