@@ -6,7 +6,12 @@ This zero-dependency Rust crate manages hidden config and state directories acro
 
 I want to shout out [dirs](https://crates.io/crates/dirs) and [directories](https://crates.io/crates/directories), as they inspired this crate!
 
-All mayor Operating Systems (Windows, Linux, MacOS) are supported.
+All major Operating Systems (Windows, Linux, MacOS) are supported.
+
+## Motivation
+
+The main reason for writing this, was as always, the zero external dependencies goal. Along with that, I also really wanted to play around with supporting different operating system architectures again.\
+During designing and scoping the project, I also set my sights on implementing some ffi's and creating my own trait for the first time.
 
 ## Roadmap
 
@@ -68,6 +73,10 @@ All mayor Operating Systems (Windows, Linux, MacOS) are supported.
         - [x] Linux
         - [x] MacOS
 - [ ] Stable Features
+    - [ ] Documentation
+        - [ ] Examples in all function documentation
+        - [ ] Readme
+            - [ ] Full usage examples
     - [x] Basic Hiding
     - [x] Atomic "Hide-and-Move"
     - [ ] Super Hiding
