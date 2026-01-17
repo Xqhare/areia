@@ -27,3 +27,15 @@ pub fn get_home() -> AreiaResult<PathBuf> {
 pub fn is_any_component_hidden(path: &PathBuf) -> AreiaResult<bool> {
     windows::is_hidden(path)
 }
+
+pub fn is_superhidden(path: &PathBuf) -> AreiaResult<bool> {
+    windows::is_super_hidden(path)
+}
+
+pub fn super_hide(path: &mut PathBuf) -> AreiaResult<PathBuf> {
+    windows::super_hide(path)
+}
+
+pub fn super_unhide(path: &mut PathBuf) -> AreiaResult<PathBuf> {
+    windows::super_unhide(path)
+}

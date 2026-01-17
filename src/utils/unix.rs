@@ -51,20 +51,31 @@ fn is_component_hidden(path: &OsStr) -> bool {
     path.to_str().expect("Unix path is valid UTF-8 by convention").starts_with(".")
 }
 
-pub fn is_any_component_hidden(path: &PathBuf) -> bool {
-    path.components().any(|c| is_component_hidden(c.as_os_str()))
+pub fn is_any_component_hidden(path: &PathBuf) -> AreiaResult<bool> {
+    Ok(path.components().any(|c| is_component_hidden(c.as_os_str())))
+}
+
+/// Takes in a path, and returns a new path where the last component is hidden.
+/// Returns the path unmodified if the last component is already hidden
+pub fn make_hidden_path(path: &PathBuf) -> PathBuf {
+    let mut new_path = path.clone();
+    if is_any_component_hidden(&new_path).expect("Always Ok") {
+        new_path
+    } else {
+        new_path.set_file_name(format!(".{}", new_path.file_name().unwrap().to_str().expect("Unix path is valid UTF-8 by convention")));
+        new_path
+    }
 }
 
 /// First checks if any component is hidden.
 /// If yes -> returns the path and does nothing
 /// If no -> moves the last component to be hidden, returns the new path
 pub fn hide_file(path: &PathBuf) -> AreiaResult<PathBuf> {
-    let old_path = path.clone();
-    let mut new_path = path.clone();
-    if is_any_component_hidden(&new_path) {
-        return Ok(new_path);
+    if is_any_component_hidden(&path).expect("Always Ok") {
+        return Ok(path.clone());
     }
-    new_path.set_file_name(format!(".{}", new_path.file_name().unwrap().to_str().expect("Unix path is valid UTF-8 by convention")));
+    let old_path = path.clone();
+    let new_path = make_hidden_path(&path);
     if !old_path.exists() {
         create_all_dir_with_file(&old_path)?;
     }
@@ -79,7 +90,7 @@ pub fn unhide_file(path: &PathBuf) -> AreiaResult<PathBuf> {
     let old_path = path.clone();
     let mut new_path = path.clone();
 
-    if !is_any_component_hidden(&old_path) {
+    if !is_any_component_hidden(&old_path).expect("Always Ok") {
         return Ok(old_path);
     }
 

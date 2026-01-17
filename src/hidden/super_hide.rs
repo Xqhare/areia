@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::error::{AreiaError, AreiaResult};
+use crate::{error::{AreiaError, AreiaResult}, utils};
 
 use super::SuperHidden;
 
@@ -13,7 +13,11 @@ impl SuperHidden for PathBuf {
             if !self.exists() {
                 return Err(AreiaError::SuperHidingRequiresExistingPath(self.clone()));
             }
-            todo!()
+            if cfg!(target_os = "windows") || cfg!(target_os = "macos") {
+                utils::is_superhidden(&self)
+            } else {
+                Err(AreiaError::SuperHidingNotSupported("Super hiding not supported on this OS".to_string()))
+            }
         }
     }
 
@@ -27,7 +31,11 @@ impl SuperHidden for PathBuf {
             if self.is_super_hidden()? {
                 return Ok(self.clone());
             }
-            todo!()
+            if cfg!(target_os = "windows") || cfg!(target_os = "macos") {
+                utils::super_hide(self)
+            } else {
+                Err(AreiaError::SuperHidingNotSupported("Super hiding not supported on this OS".to_string()))
+            }
         }
     }
 
@@ -41,7 +49,11 @@ impl SuperHidden for PathBuf {
             if !self.is_super_hidden()? {
                 return Ok(self.clone());
             }
-            todo!()
+            if cfg!(target_os = "windows") || cfg!(target_os = "macos") {
+                utils::super_unhide(self)
+            } else {
+                Err(AreiaError::SuperHidingNotSupported("Super hiding not supported on this OS".to_string()))
+            }
         }
     }
 }
