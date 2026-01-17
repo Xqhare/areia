@@ -54,6 +54,6 @@ pub fn super_hide(path: &mut PathBuf) -> AreiaResult<PathBuf> {
 }
 
 pub fn super_unhide(path: &mut PathBuf) -> AreiaResult<PathBuf> {
-    windows::super_unhide(path);
+    windows::super_unhide(path)?;
     Ok(path.clone())
 }
