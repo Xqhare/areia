@@ -10,7 +10,7 @@ pub fn is_superhidden(path: &PathBuf) -> AreiaResult<bool> {
     for component in path.components() {
         new_path.push(component);
         if new_path.is_hidden()? {
-            has_hidden_flag(&new_path)
+            return has_hidden_flag(&new_path);
         }
     }
     return Ok(false);
