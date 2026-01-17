@@ -77,9 +77,10 @@ During designing and scoping the project, I also set my sights on implementing s
         - [ ] Examples in all function documentation
         - [ ] Readme
             - [ ] Full usage examples
+    - [ ] Tests
     - [x] Basic Hiding
     - [x] Atomic "Hide-and-Move"
-    - [ ] Super Hiding
+    - [x] Super Hiding
         - [x] MacOS Hybrid Support
         - [x] Windows "System" Flag
 - [ ] Nice-to-Haves
