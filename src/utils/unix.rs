@@ -37,6 +37,7 @@ pub fn get_home() -> AreiaResult<std::path::PathBuf> {
 /// # Returns
 /// `Some(path)` if the path is absolute, the path is converted to `PathBuf`
 /// `None` if the path is not absolute
+#[cfg(target_os = "linux")]
 pub fn is_absolute_path(path: OsString) -> Option<PathBuf> {
     let path = PathBuf::from(path);
     if path.is_absolute() {
