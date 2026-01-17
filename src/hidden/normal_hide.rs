@@ -1,9 +1,9 @@
 use std::path::PathBuf;
 
 use crate::error::{AreiaError, AreiaResult};
-use crate::utils::{hide_path, make_hidden_path, unhide_path};
-#[cfg(target_os = "windows")]
-use crate::utils::windows::is_windows_hidden;
+use crate::utils::{hide_path, unhide_path};
+#[cfg(unix)]
+use crate::utils::make_hidden_path;
 
 use super::Hidden;
 
