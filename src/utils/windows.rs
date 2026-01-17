@@ -25,7 +25,7 @@ pub fn get_home() -> AreiaResult<PathBuf> {
 
 pub fn hide_file(path: &mut PathBuf) -> AreiaResult<PathBuf> {
     if !path.exists() {
-        return Err(AreiaError::FileDoesNotExist(path.to_string_lossy().to_string()));
+        return Err(AreiaError::FileDoesNotExist(path));
     }
     windows::hide(path)?;
     Ok(path.clone())
@@ -33,7 +33,7 @@ pub fn hide_file(path: &mut PathBuf) -> AreiaResult<PathBuf> {
 
 pub fn unhide_file(path: &mut PathBuf) -> AreiaResult<PathBuf> {
     if !path.exists() {
-        return Err(AreiaError::FileDoesNotExist(path.to_string_lossy().to_string()));
+        return Err(AreiaError::FileDoesNotExist(path));
     }
     windows::unhide(path)?;
     Ok(path.clone())
