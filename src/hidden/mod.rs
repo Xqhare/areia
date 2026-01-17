@@ -22,7 +22,7 @@ pub trait Hidden {
     /// Returns `true` if the file or folder is hidden.
     /// Returns `false` if the file or folder is not hidden.
     /// SPECIAL: Returns `false` if the path does not exist or an error occurs.
-    fn is_hidden(&self) -> bool;
+    fn is_hidden(&self) -> AreiaResult<bool>;
     /// Hides the path
     ///
     /// # Platform specific behaviour
@@ -84,8 +84,9 @@ pub trait Hidden {
     /// # Errors
     ///
     /// Errors if the program has insufficient permissions to move the file or folder.
-
     fn unhide(&mut self) -> AreiaResult<PathBuf>;
+    // Like hide, but returns only the hidden path - no file creation whatsoever
+    fn into_hidden_path(self) -> AreiaResult<PathBuf>;
 }
 
 pub trait SuperHidden {
