@@ -82,7 +82,6 @@ fn all_paths_present() {
     assert!(user.template_dir().is_none());
     assert!(user.video_dir().is_some());
     assert_ne!(user.video_dir().as_ref().unwrap(), &PathBuf::from(""));
-
 }
 
 #[test]

@@ -55,11 +55,7 @@ pub fn preference_dir(home: PathBuf) -> PathBuf {
 
 fn font_dir(home: PathBuf) -> Option<PathBuf> {
     let out = home.join("Library").join("Fonts");
-    if out.exists() {
-        Some(out)
-    } else {
-        None
-    }
+    if out.exists() { Some(out) } else { None }
 }
 
 pub fn get_usr_dirs<P: Into<PathBuf>>(home: P) -> AreiaResult<HashMap<String, Option<PathBuf>>> {

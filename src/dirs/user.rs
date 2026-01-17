@@ -1,6 +1,9 @@
 use std::path::PathBuf;
 
-use crate::{error::AreiaResult, utils::{factory::get_usr_dirs, get_home}};
+use crate::{
+    error::AreiaResult,
+    utils::{factory::get_usr_dirs, get_home},
+};
 
 #[derive(Debug, Clone)]
 pub struct UserDirs {
@@ -13,7 +16,7 @@ pub struct UserDirs {
     picture_dir: Option<PathBuf>,
     public_dir: Option<PathBuf>,
     template_dir: Option<PathBuf>,
-    video_dir: Option<PathBuf>
+    video_dir: Option<PathBuf>,
 }
 
 impl UserDirs {
@@ -66,28 +69,53 @@ fn user_dirs() -> AreiaResult<UserDirs> {
     let home_dir = get_home()?;
 
     let usr_dirs = get_usr_dirs(home_dir.clone())?;
-    let audio_dir = usr_dirs.get("MUSIC").expect("Key is always created by factory").clone();
-    let desktop_dir = usr_dirs.get("DESKTOP").expect("Key is always created by factory").clone();
-    let document_dir = usr_dirs.get("DOCUMENTS").expect("Key is always created by factory").clone();
-    let download_dir = usr_dirs.get("DOWNLOADS").expect("Key is always created by factory").clone();
-    let font_dir = usr_dirs.get("FONTS").expect("Key is always created by factory").clone();
-    let picture_dir = usr_dirs.get("PICTURES").expect("Key is always created by factory").clone();
-    let public_dir = usr_dirs.get("PUBLICSHARE").expect("Key is always created by factory").clone();
-    let template_dir = usr_dirs.get("TEMPLATES").expect("Key is always created by factory").clone();
-    let video_dir = usr_dirs.get("VIDEOS").expect("Key is always created by factory").clone();
+    let audio_dir = usr_dirs
+        .get("MUSIC")
+        .expect("Key is always created by factory")
+        .clone();
+    let desktop_dir = usr_dirs
+        .get("DESKTOP")
+        .expect("Key is always created by factory")
+        .clone();
+    let document_dir = usr_dirs
+        .get("DOCUMENTS")
+        .expect("Key is always created by factory")
+        .clone();
+    let download_dir = usr_dirs
+        .get("DOWNLOADS")
+        .expect("Key is always created by factory")
+        .clone();
+    let font_dir = usr_dirs
+        .get("FONTS")
+        .expect("Key is always created by factory")
+        .clone();
+    let picture_dir = usr_dirs
+        .get("PICTURES")
+        .expect("Key is always created by factory")
+        .clone();
+    let public_dir = usr_dirs
+        .get("PUBLICSHARE")
+        .expect("Key is always created by factory")
+        .clone();
+    let template_dir = usr_dirs
+        .get("TEMPLATES")
+        .expect("Key is always created by factory")
+        .clone();
+    let video_dir = usr_dirs
+        .get("VIDEOS")
+        .expect("Key is always created by factory")
+        .clone();
 
-    Ok(
-        UserDirs {
-            home_dir,
-            audio_dir,
-            desktop_dir,
-            document_dir,
-            download_dir,
-            font_dir,
-            picture_dir,
-            public_dir,
-            template_dir,
-            video_dir
-        }
-    )
+    Ok(UserDirs {
+        home_dir,
+        audio_dir,
+        desktop_dir,
+        document_dir,
+        download_dir,
+        font_dir,
+        picture_dir,
+        public_dir,
+        template_dir,
+        video_dir,
+    })
 }

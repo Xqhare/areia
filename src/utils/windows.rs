@@ -5,7 +5,7 @@ use super::ffi::windows;
 
 /// Get the user's home directory
 ///
-/// Works on MacOS, Linux, 
+/// Works on MacOS, Linux,
 /// Behaviour of `std::env::home_dir()` on Windows is apparently problematic
 ///
 /// # Returns
@@ -14,7 +14,7 @@ use super::ffi::windows;
 pub fn get_home() -> AreiaResult<PathBuf> {
     if let Ok(path) = windows::get_path(windows::FolderID::Profile) {
         Ok(path)
-    } else { 
+    } else {
         if let Some(path) = std::env::var_os("USERPROFILE") {
             Ok(path.into())
         } else {

@@ -1,6 +1,12 @@
-use std::{collections::HashMap, env, ffi::OsString, fs::File, io::Read, os::unix::ffi::OsStringExt, path::PathBuf};
+use std::{
+    collections::HashMap, env, ffi::OsString, fs::File, io::Read, os::unix::ffi::OsStringExt,
+    path::PathBuf,
+};
 
-use crate::{error::{AreiaError, AreiaResult}, utils::unix::is_absolute_path};
+use crate::{
+    error::{AreiaError, AreiaResult},
+    utils::unix::is_absolute_path,
+};
 
 pub fn cache_dir(home: PathBuf) -> PathBuf {
     if let Some(path) = env::var_os("XDG_CACHE_HOME").and_then(|x| is_absolute_path(x)) {
@@ -83,7 +89,7 @@ pub fn executable_dir(home: PathBuf) -> Option<PathBuf> {
     }
 }
 
-fn font_dir(home: PathBuf) -> Option<PathBuf> { 
+fn font_dir(home: PathBuf) -> Option<PathBuf> {
     if home.join(".local/share/fonts").exists() {
         Some(home.join(".local/share/fonts"))
     } else {
@@ -99,7 +105,7 @@ pub fn get_usr_dirs<P: Into<PathBuf>>(home: P) -> AreiaResult<HashMap<String, Op
             let mut out = parse_xdg_dirs(bytes, home.clone())?;
             out.insert("FONTS".to_owned(), font_dir(home));
             Ok(out)
-        },
+        }
         Err(err) => Err(AreiaError::IoError(err)),
     }
 }
@@ -123,7 +129,17 @@ fn split_once(bytes: &[u8], sep: u8) -> Option<(&[u8], &[u8])> {
 }
 fn parse_xdg_dirs(bytes: Vec<u8>, home: PathBuf) -> AreiaResult<HashMap<String, Option<PathBuf>>> {
     let mut out = HashMap::new();
-    let defaults = vec![("MUSIC".to_owned(), None), ("DESKTOP".to_owned(), None), ("DOCUMENTS".to_owned(), None), ("DOWNLOADS".to_owned(), None), ("PICTURES".to_owned(), None), ("FONTS".to_owned(), None), ("PUBLICSHARE".to_owned(), None), ("TEMPLATES".to_owned(), None), ("VIDEOS".to_owned(), None)];
+    let defaults = vec![
+        ("MUSIC".to_owned(), None),
+        ("DESKTOP".to_owned(), None),
+        ("DOCUMENTS".to_owned(), None),
+        ("DOWNLOADS".to_owned(), None),
+        ("PICTURES".to_owned(), None),
+        ("FONTS".to_owned(), None),
+        ("PUBLICSHARE".to_owned(), None),
+        ("TEMPLATES".to_owned(), None),
+        ("VIDEOS".to_owned(), None),
+    ];
 
     for (key, val) in defaults {
         out.insert(key, val);
@@ -142,12 +158,8 @@ fn parse_xdg_dirs(bytes: Vec<u8>, home: PathBuf) -> AreiaResult<HashMap<String, 
             match str::from_utf8(&key[4..key.len() - 4]) {
                 Ok(key) => {
                     // Mac and Win call it `DOWNLOADS`, XDG uses the singular - So we unify the names here
-                    if key == "DOWNLOAD" {
-                        "DOWNLOADS"
-                    } else {
-                        key
-                    }
-                },
+                    if key == "DOWNLOAD" { "DOWNLOADS" } else { key }
+                }
                 // Err should never match, but just in case
                 Err(_) => continue,
             }
@@ -185,7 +197,7 @@ fn parse_xdg_dirs(bytes: Vec<u8>, home: PathBuf) -> AreiaResult<HashMap<String, 
         } else {
             PathBuf::from(val)
         };
-        
+
         out.insert(key.to_owned(), Some(path));
     }
 
@@ -196,17 +208,35 @@ fn parse_xdg_dirs(bytes: Vec<u8>, home: PathBuf) -> AreiaResult<HashMap<String, 
 fn xdg_user_dir_parsing() {
     let home = env::var_os("HOME").unwrap();
     let home_path = PathBuf::from(home.clone());
-    
+
     let dirs = get_usr_dirs(home).unwrap();
     assert_eq!(dirs.len(), 9);
 
-    assert_eq!(dirs.get("DESKTOP").unwrap(), &Some(home_path.join("Desktop")));
-    assert_eq!(dirs.get("DOCUMENTS").unwrap(), &Some(home_path.join("Documents")));
-    assert_eq!(dirs.get("DOWNLOADS").unwrap(), &Some(home_path.join("Downloads")));
+    assert_eq!(
+        dirs.get("DESKTOP").unwrap(),
+        &Some(home_path.join("Desktop"))
+    );
+    assert_eq!(
+        dirs.get("DOCUMENTS").unwrap(),
+        &Some(home_path.join("Documents"))
+    );
+    assert_eq!(
+        dirs.get("DOWNLOADS").unwrap(),
+        &Some(home_path.join("Downloads"))
+    );
     assert_eq!(dirs.get("MUSIC").unwrap(), &Some(home_path.join("Music")));
-    assert_eq!(dirs.get("PICTURES").unwrap(), &Some(home_path.join("Pictures")));
-    assert_eq!(dirs.get("PUBLICSHARE").unwrap(), &Some(home_path.join("Public")));
-    assert_eq!(dirs.get("TEMPLATES").unwrap(), &Some(home_path.join("Templates")));
+    assert_eq!(
+        dirs.get("PICTURES").unwrap(),
+        &Some(home_path.join("Pictures"))
+    );
+    assert_eq!(
+        dirs.get("PUBLICSHARE").unwrap(),
+        &Some(home_path.join("Public"))
+    );
+    assert_eq!(
+        dirs.get("TEMPLATES").unwrap(),
+        &Some(home_path.join("Templates"))
+    );
     assert_eq!(dirs.get("VIDEOS").unwrap(), &Some(home_path.join("Videos")));
     assert!(dirs.get("FONTS").unwrap().is_some());
 }

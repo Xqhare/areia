@@ -1,6 +1,9 @@
 use std::{collections::HashMap, path::PathBuf};
 
-use crate::{error::AreiaResult, utils::ffi::windows::{get_path, FolderID}};
+use crate::{
+    error::AreiaResult,
+    utils::ffi::windows::{FolderID, get_path},
+};
 
 // TODO: If `get_path` returns an error, it is currently suppressed and an empty path is returned - I should fix that
 
@@ -15,14 +18,14 @@ pub fn config_dir(home: PathBuf) -> PathBuf {
 pub fn data_dir(_home: PathBuf) -> PathBuf {
     match get_path(FolderID::RoamingAppData) {
         Ok(path) => path,
-        Err(_) => PathBuf::new()
+        Err(_) => PathBuf::new(),
     }
 }
 
 pub fn data_local_dir(_home: PathBuf) -> PathBuf {
     match get_path(FolderID::LocalAppData) {
         Ok(path) => path,
-        Err(_) => PathBuf::new()
+        Err(_) => PathBuf::new(),
     }
 }
 

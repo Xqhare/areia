@@ -1,9 +1,9 @@
 use std::path::PathBuf;
 
 use crate::error::{AreiaError, AreiaResult};
-use crate::utils::{hide_path, unhide_path};
 #[cfg(unix)]
 use crate::utils::make_hidden_path;
+use crate::utils::{hide_path, unhide_path};
 
 use super::Hidden;
 
@@ -12,7 +12,7 @@ impl Hidden for PathBuf {
         is_path_empty(&self)?;
         crate::utils::is_hidden(&self)
     }
-    
+
     fn hide(&mut self) -> AreiaResult<PathBuf> {
         is_path_empty(&self)?;
         if self.is_hidden()? {
@@ -25,12 +25,15 @@ impl Hidden for PathBuf {
         is_path_empty(&self)?;
         unhide_path(self)
     }
+
     fn into_hidden_path(self) -> AreiaResult<PathBuf> {
         is_path_empty(&self)?;
         #[cfg(unix)]
         return Ok(make_hidden_path(&self));
         #[cfg(windows)]
-        return Err(AreiaError::MakingHiddenPathNotSupported("Unavailable on Windows".to_string()));
+        return Err(AreiaError::MakingHiddenPathNotSupported(
+            "Unavailable on Windows".to_string(),
+        ));
     }
 }
 

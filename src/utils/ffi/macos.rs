@@ -1,6 +1,6 @@
-use std::ffi::{c_void, OsString, CString};
-use std::path::{PathBuf, Path};
-use std::os::unix::ffi::{OsStringExt, OsStrExt};
+use std::ffi::{CString, OsString, c_void};
+use std::os::unix::ffi::{OsStrExt, OsStringExt};
+use std::path::{Path, PathBuf};
 
 use crate::error::{AreiaError, AreiaResult};
 
@@ -42,10 +42,10 @@ unsafe extern "C" {
     fn CFURLCopyFileSystemPath(an_url: CFURLRef, pathstyle: i64) -> CFStringRef;
     fn CFStringGetLength(the_string: CFStringRef) -> isize;
     fn CFStringGetCString(
-        the_string: CFStringRef, 
-        buffer: *mut u8, 
-        buffer_size: isize, 
-        encoding: u32
+        the_string: CFStringRef,
+        buffer: *mut u8,
+        buffer_size: isize,
+        encoding: u32,
     ) -> bool;
     fn CFRelease(the_object: CFRef);
 }
@@ -71,7 +71,8 @@ pub fn get_mac_home_fallback() -> Option<PathBuf> {
 
         let path_len = CFStringGetLength(path_ref);
         let mut buf = vec![0u8; (path_len * 4) as usize + 1];
-        let success = CFStringGetCString(path_ref, buf.as_mut_ptr(), buf.len() as isize, 0x08000100);
+        let success =
+            CFStringGetCString(path_ref, buf.as_mut_ptr(), buf.len() as isize, 0x08000100);
         CFRelease(path_ref);
         if success {
             let end = buf.iter().position(|&c| c == 0).unwrap_or(buf.len());
@@ -105,7 +106,10 @@ fn get_flags(path: &Path) -> AreiaResult<u32> {
 
         if retr != 0 {
             let err = std::io::Error::last_os_error();
-            return Err(AreiaError::MacError(format!("Failed to stat file: {}", err)));
+            return Err(AreiaError::MacError(format!(
+                "Failed to stat file: {}",
+                err
+            )));
         }
 
         Ok(buf.st_flags)
@@ -136,9 +140,11 @@ fn set_flag(path: &Path, flag: u32, enable: bool) -> AreiaResult<()> {
         let res = chflags(c_path.as_ptr(), new_flags);
         if res != 0 {
             let err = std::io::Error::last_os_error();
-            return Err(AreiaError::MacError(format!("Failed to set hidden attribute: {}", err)));
+            return Err(AreiaError::MacError(format!(
+                "Failed to set hidden attribute: {}",
+                err
+            )));
         }
     }
     Ok(())
 }
-

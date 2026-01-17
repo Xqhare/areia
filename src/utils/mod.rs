@@ -44,7 +44,9 @@ pub fn is_superhidden(path: &PathBuf) -> AreiaResult<bool> {
     #[cfg(target_os = "windows")]
     return os::is_superhidden(path);
 
-    Err(AreiaError::SuperHidingNotSupported("Super hiding not supported on this OS".to_string()))
+    Err(AreiaError::SuperHidingNotSupported(
+        "Super hiding not supported on this OS".to_string(),
+    ))
 }
 
 #[allow(unused_variables, unreachable_code)]
@@ -56,7 +58,9 @@ pub fn super_hide(path: &mut PathBuf) -> AreiaResult<PathBuf> {
     #[cfg(target_os = "windows")]
     return os::super_hide(path);
 
-    Err(AreiaError::SuperHidingNotSupported("Super hiding not supported on this OS".to_string()))
+    Err(AreiaError::SuperHidingNotSupported(
+        "Super hiding not supported on this OS".to_string(),
+    ))
 }
 
 #[allow(unused_variables, unreachable_code)]
@@ -68,7 +72,9 @@ pub fn super_unhide(path: &mut PathBuf) -> AreiaResult<PathBuf> {
     #[cfg(target_os = "windows")]
     return os::super_unhide(path);
 
-    Err(AreiaError::SuperHidingNotSupported("Super hiding not supported on this OS".to_string()))
+    Err(AreiaError::SuperHidingNotSupported(
+        "Super hiding not supported on this OS".to_string(),
+    ))
 }
 
 #[cfg(unix)]

@@ -1,6 +1,15 @@
 use std::path::PathBuf;
 
-use crate::{error::AreiaResult, utils::{factory::{cache_dir, config_dir, config_local_dir, data_dir, data_local_dir, executable_dir, preference_dir, runtime_dir, state_dir}, get_home}};
+use crate::{
+    error::AreiaResult,
+    utils::{
+        factory::{
+            cache_dir, config_dir, config_local_dir, data_dir, data_local_dir, executable_dir,
+            preference_dir, runtime_dir, state_dir,
+        },
+        get_home,
+    },
+};
 
 #[derive(Debug, Clone)]
 pub struct BaseDirs {
@@ -13,7 +22,7 @@ pub struct BaseDirs {
     executable_dir: Option<PathBuf>,
     preference_dir: PathBuf,
     runtime_dir: Option<PathBuf>,
-    state_dir: Option<PathBuf>
+    state_dir: Option<PathBuf>,
 }
 
 impl BaseDirs {
@@ -84,9 +93,9 @@ fn base_dirs() -> AreiaResult<BaseDirs> {
                 executable_dir,
                 preference_dir,
                 runtime_dir,
-                state_dir
+                state_dir,
             })
-        },
-        Err(err) => Err(err)
+        }
+        Err(err) => Err(err),
     }
 }

@@ -1,4 +1,3 @@
-
 #[cfg(any(target_os = "windows", all(target_os = "windows", doc)))]
 mod windows;
 #[cfg(target_os = "windows")]

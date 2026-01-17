@@ -1,8 +1,8 @@
 use std::path::PathBuf;
 
-use crate::{error::AreiaResult, Hidden};
+use crate::{Hidden, error::AreiaResult};
 
-use super::ffi::macos::{has_hidden_flag, set_hidden_flag, remove_hidden_flag};
+use super::ffi::macos::{has_hidden_flag, remove_hidden_flag, set_hidden_flag};
 
 /// Checks if any component of the path is hidden and has the hidden flag set.
 pub fn is_superhidden(path: &PathBuf) -> AreiaResult<bool> {

@@ -1,6 +1,12 @@
-use std::{ffi::{OsStr, OsString}, path::PathBuf};
+use std::{
+    ffi::{OsStr, OsString},
+    path::PathBuf,
+};
 
-use crate::{error::{AreiaError, AreiaResult}, BaseDirs, UserDirs};
+use crate::{
+    BaseDirs, UserDirs,
+    error::{AreiaError, AreiaResult},
+};
 
 use super::ffi::unix::get_unix_home_fallback;
 
@@ -9,7 +15,7 @@ use super::ffi::macos::get_mac_home_fallback;
 
 /// Get the user's home directory
 ///
-/// Works on MacOS, Linux, 
+/// Works on MacOS, Linux,
 /// Behaviour of `std::env::home_dir()` on Windows is apparently problematic
 ///
 /// # Returns
@@ -21,7 +27,7 @@ pub fn get_home() -> AreiaResult<std::path::PathBuf> {
     } else {
         if let Some(path) = get_unix_home_fallback() {
             return Ok(path);
-        } 
+        }
 
         #[cfg(target_os = "macos")]
         if let Some(path) = get_mac_home_fallback() {
@@ -40,20 +46,20 @@ pub fn get_home() -> AreiaResult<std::path::PathBuf> {
 #[cfg(target_os = "linux")]
 pub fn is_absolute_path(path: OsString) -> Option<PathBuf> {
     let path = PathBuf::from(path);
-    if path.is_absolute() {
-        Some(path)
-    } else {
-        None
-    }
+    if path.is_absolute() { Some(path) } else { None }
 }
 
 /// only handles unix dotfiles
 fn is_component_hidden(path: &OsStr) -> bool {
-    path.to_str().expect("Unix path is valid UTF-8 by convention").starts_with(".")
+    path.to_str()
+        .expect("Unix path is valid UTF-8 by convention")
+        .starts_with(".")
 }
 
 pub fn is_any_component_hidden(path: &PathBuf) -> AreiaResult<bool> {
-    Ok(path.components().any(|c| is_component_hidden(c.as_os_str())))
+    Ok(path
+        .components()
+        .any(|c| is_component_hidden(c.as_os_str())))
 }
 
 /// Takes in a path, and returns a new path where the last component is hidden.
@@ -63,7 +69,14 @@ pub fn make_hidden_path(path: &PathBuf) -> PathBuf {
     if is_any_component_hidden(&new_path).expect("Always Ok") {
         new_path
     } else {
-        new_path.set_file_name(format!(".{}", new_path.file_name().unwrap().to_str().expect("Unix path is valid UTF-8 by convention")));
+        new_path.set_file_name(format!(
+            ".{}",
+            new_path
+                .file_name()
+                .unwrap()
+                .to_str()
+                .expect("Unix path is valid UTF-8 by convention")
+        ));
         new_path
     }
 }
@@ -132,7 +145,12 @@ pub fn unhide_file(path: &PathBuf) -> AreiaResult<PathBuf> {
     let mut new_components = Vec::new();
     for component in new_path.components() {
         if is_component_hidden(component.as_os_str()) {
-            let unhidden_component = component.as_os_str().to_str().expect("Unix path is valiud UTF-8 by convention").strip_prefix(".").expect("Component must be hidden");
+            let unhidden_component = component
+                .as_os_str()
+                .to_str()
+                .expect("Unix path is valiud UTF-8 by convention")
+                .strip_prefix(".")
+                .expect("Component must be hidden");
             let tmp = OsString::from(unhidden_component);
             new_components.push(tmp);
         } else {
