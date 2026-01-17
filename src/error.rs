@@ -8,7 +8,9 @@ type Reason = String;
 
 #[derive(Debug)]
 pub enum AreiaError {
+    PathMustBeSomething(PathBuf),
     CantGetHomeDir,
+    MakingHiddenPathNotSupported(Reason),
     SuperHidingNotSupported(Reason),
     SuperHidingRequiresExistingPath(PathBuf),
     IoError(std::io::Error),
@@ -29,6 +31,8 @@ impl std::fmt::Display for AreiaError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             AreiaError::CantGetHomeDir => write!(f, "Can't get home directory"),
+            AreiaError::PathMustBeSomething(path) => write!(f, "Path must be something: {:?}", path),
+            AreiaError::MakingHiddenPathNotSupported(reason) => write!(f, "Making hidden path not supported. Reason: {}", reason),
             AreiaError::SuperHidingNotSupported(reason) => write!(f, "Super hiding not supported. Reason: {}", reason),
             AreiaError::SuperHidingRequiresExistingPath(path) => write!(f, "Super hiding requires an existing path (either file or directory): {:?}", path),
             AreiaError::IoError(err) => write!(f, "IO error: {}", err),
