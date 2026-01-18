@@ -93,7 +93,7 @@ areia = { git = "https://github.com/xqhare/areia" }
         - [x] macOS
 - [ ] Stable Features
     - [ ] Documentation
-        - [ ] Examples in all function documentation
+        - [x] Examples in all function documentation
         - [ ] README
             - [ ] Full usage examples
     - [ ] Tests
