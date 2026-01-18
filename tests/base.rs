@@ -1,5 +1,4 @@
 use areia::BaseDirs;
-use areia::Hidden;
 use std::path::PathBuf;
 
 #[test]
