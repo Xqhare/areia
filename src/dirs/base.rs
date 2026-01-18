@@ -14,6 +14,7 @@ use crate::{
 /// Base directories
 ///
 /// This struct contains all the base directories:
+///
 /// - `home_dir`
 /// - `cache_dir`
 /// - `config_dir`
