@@ -10,7 +10,7 @@ mod unix;
 #[cfg(unix)]
 use unix as os;
 
-#[cfg(any(target_os = "macos", doc))]
+#[cfg(any(target_os = "macos", all(target_os = "macos", doc)))]
 mod macos;
 
 #[cfg(any(target_os = "windows", all(target_os = "windows", doc)))]
