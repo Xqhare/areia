@@ -1,17 +1,36 @@
 # Areia
 
-Create valid paths and hidden directories for your application on Windows, Linux, and MacOS.
+Create valid paths and hidden directories for your application on Windows, Linux, and macOS.
 
 This zero-dependency Rust crate manages hidden config and state directories across Windows, Linux, and macOS, handling platform-specific hiding logic automatically. Like the Greek nymph who hid her son in vines, Areia keeps your data safe and unseen if needed.
 
 I want to shout out [dirs](https://crates.io/crates/dirs) and [directories](https://crates.io/crates/directories), as they inspired this crate!
 
-All major Operating Systems (Windows, Linux, MacOS) are supported.
+All major Operating Systems (Windows, Linux, macOS) are supported.
+
+The crate is tested on Linux. It builds on Windows and macOS (on GitHub Actions) but I lack the capability to test them.
+
+## Features
+
+- Get paths to standard directories (e.g. `home`, `cache`, etc.)
+- Create hidden paths (Unix only)
+- Create hidden files / directories
+- Create super hidden files / directories
+- Zero Dependencies
 
 ## Motivation
 
-The main reason for writing this, was as always, the zero external dependencies goal. Along with that, I also really wanted to play around with supporting different operating system architectures again.\
-During designing and scoping the project, I also set my sights on implementing some ffi's and creating my own trait for the first time.
+The main reason for writing this, was as always, the zero external Dependencies goal. Along with that, I also really wanted to play around with supporting different operating system architectures again.\
+During designing and scoping the project, I also set my sights on implementing some FFI and creating my own trait for the first time.
+
+## Usage
+
+### Add to Cargo.toml
+
+```toml
+[dependencies]
+areia = { git = "https://github.com/xqhare/areia" }
+```
 
 ## Roadmap
 
@@ -51,7 +70,7 @@ During designing and scoping the project, I also set my sights on implementing s
             - [x] Public
             - [x] Template
             - [x] Video
-        - [x] MacOS
+        - [x] macOS
             - [x] Home
             - [x] Cache
             - [x] Config
@@ -71,17 +90,17 @@ During designing and scoping the project, I also set my sights on implementing s
     - [x] Platform-Specific "Hide" Implementation
         - [x] Windows
         - [x] Linux
-        - [x] MacOS
+        - [x] macOS
 - [ ] Stable Features
     - [ ] Documentation
         - [ ] Examples in all function documentation
-        - [ ] Readme
+        - [ ] README
             - [ ] Full usage examples
     - [ ] Tests
     - [x] Basic Hiding
     - [x] Atomic "Hide-and-Move"
     - [x] Super Hiding
-        - [x] MacOS Hybrid Support
+        - [x] macOS Hybrid Support
         - [x] Windows "System" Flag
 - [ ] Nice-to-Haves
     - [ ] Directory "Auto-Creator"
