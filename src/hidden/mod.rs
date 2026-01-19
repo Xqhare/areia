@@ -151,7 +151,7 @@ pub trait Hidden {
     /// use std::path::PathBuf;
     /// let path = PathBuf::from("hide.tmp");
     /// assert!(!path.is_hidden().unwrap());
-    /// let hidden_path = path.into_hidden_path();
+    /// let hidden_path = path.try_into_hidden_path();
     /// assert!(hidden_path.is_ok());
     /// assert!(hidden_path.as_ref().unwrap().is_hidden().unwrap());
     /// ```
@@ -159,7 +159,32 @@ pub trait Hidden {
     /// # Errors
     ///
     /// Errors if the program has insufficient permissions to move the file or folder.
-    fn into_hidden_path(&self) -> AreiaResult<PathBuf>;
+    fn try_into_hidden_path(&self) -> AreiaResult<PathBuf>;
+
+    /// Like unhide, but returns only the unhidden path - no file deletion or moving whatsoever.
+    ///
+    /// In contrast to `unhide()` this does not need a mutable `PathBuf`
+    ///
+    /// # Platform specific behaviour
+    ///
+    /// See `unhide()`.
+    ///
+    /// # Example
+    /// ```
+    /// use areia::Hidden;
+    /// use std::path::PathBuf;
+    /// let path = PathBuf::from(".a_hidden_dir/");
+    /// assert!(path.is_hidden().unwrap());
+    /// let unhidden_path = path.try_into_unhidden_path();
+    /// assert!(unhidden_path.is_ok());
+    /// assert!(!unhidden_path.as_ref().unwrap().exists());
+    /// assert!(!path.exists());
+    /// assert!(!unhidden_path.as_ref().unwrap().is_hidden().unwrap());
+    /// assert_eq!(unhidden_path.as_ref().unwrap(), &PathBuf::from("a_hidden_dir/"));
+    /// ```
+    ///
+    /// # Errors
+    fn try_into_unhidden_path(&self) -> AreiaResult<PathBuf>;
 }
 
 pub trait SuperHidden {

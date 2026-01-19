@@ -73,21 +73,39 @@ fn hide_already_hidden_path() {
 }
 
 #[test]
+#[cfg(not(target_os = "windows"))]
 fn into_hidden() {
-    if cfg!(not(target_os = "windows")) {
-        use areia::Hidden;
-        use std::path::PathBuf;
+    use areia::Hidden;
+    use std::path::PathBuf;
 
-        let mut path = PathBuf::from("non_existing/some.file");
-        let hidden_path = path.into_hidden_path();
-        assert!(hidden_path.is_ok());
-        assert_eq!(
-            hidden_path.as_ref().unwrap(),
-            &PathBuf::from("non_existing/.some.file")
-        );
-        assert!(!hidden_path.as_ref().unwrap().exists());
-        assert!(hidden_path.as_ref().unwrap().is_hidden().unwrap());
-    } else {
-        assert!(true);
-    }
+    let path = PathBuf::from("non_existing/some.file");
+    let hidden_path = path.try_into_hidden_path();
+    assert!(hidden_path.is_ok());
+    assert_eq!(
+        hidden_path.as_ref().unwrap(),
+        &PathBuf::from("non_existing/.some.file")
+    );
+    assert!(!hidden_path.as_ref().unwrap().exists());
+    assert!(hidden_path.as_ref().unwrap().is_hidden().unwrap());
+}
+
+#[test]
+#[cfg(not(target_os = "windows"))]
+fn into_unhidden() {
+    use areia::Hidden;
+    use std::path::PathBuf;
+
+    let path = PathBuf::from("unreal/.some.file");
+    let unhidden_path = path.try_into_unhidden_path();
+    assert!(unhidden_path.is_ok());
+    assert_eq!(unhidden_path.as_ref().unwrap(), &PathBuf::from("unreal/some.file"));
+    assert!(!unhidden_path.as_ref().unwrap().exists());
+    assert!(!unhidden_path.as_ref().unwrap().is_hidden().unwrap());
+
+    let path2 = PathBuf::from(".b_dir/");
+    let unhidden_path2 = path2.try_into_unhidden_path();
+    assert!(unhidden_path2.is_ok());
+    assert_eq!(unhidden_path2.as_ref().unwrap(), &PathBuf::from("b_dir/"));
+    assert!(!unhidden_path2.as_ref().unwrap().exists());
+    assert!(!unhidden_path2.as_ref().unwrap().is_hidden().unwrap());
 }

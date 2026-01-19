@@ -103,6 +103,11 @@ pub fn make_hidden_path(path: &PathBuf) -> PathBuf {
     os::make_hidden_path(path)
 }
 
+#[cfg(unix)]
+pub fn make_unhidden_path(path: &PathBuf) -> AreiaResult<PathBuf> {
+    os::make_unhidden_path(path)
+}
+
 #[test]
 fn delete_and_create_all_dir_basics() {
     let path = PathBuf::from("tmp_test_dir/test_file.txt");

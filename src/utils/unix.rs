@@ -4,8 +4,7 @@ use std::{
 };
 
 use crate::{
-    BaseDirs, UserDirs,
-    error::{AreiaError, AreiaResult},
+    error::{AreiaError, AreiaResult}, BaseDirs, Hidden, UserDirs
 };
 
 use super::{create_all_dir_with_file, ffi::unix::get_unix_home_fallback};
@@ -79,6 +78,11 @@ pub fn make_hidden_path(path: &PathBuf) -> PathBuf {
         ));
         new_path
     }
+}
+
+pub fn make_unhidden_path(path: &PathBuf) -> AreiaResult<PathBuf> {
+    let mut new_path = path.clone();
+    new_path.unhide()
 }
 
 /// First checks if any component is hidden.
