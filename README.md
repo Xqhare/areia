@@ -163,9 +163,9 @@ use areia::{BaseDirs, Hidden};
 use std::path::PathBuf;
 
 let base_dirs = BaseDirs::new().unwrap();
-let cache_dir = PathBuf::from(base_dirs.cache_dir());
+let cache_dir = base_dirs.cache_dir();
 
-let mut path = PathBuf::from(cache_dir.join("hidden_dir/hidden.file"));
+let mut path = cache_dir.join("hidden_dir/hidden.file");
 let hidden_path = path.hide();
 assert!(hidden_path.is_ok());
 assert_eq!(hidden_path.as_ref().unwrap(), &path);
@@ -307,9 +307,9 @@ if cfg!(not(target_os = "linux")) {
     use std::path::PathBuf;
 
     let base_dirs = BaseDirs::new().unwrap();
-    let cache_dir = PathBuf::from(base_dirs.cache_dir());
+    let cache_dir = base_dirs.cache_dir();
 
-    let mut path = PathBuf::from(cache_dir.join("hidden_dir/hidden.file"));
+    let mut path = cache_dir.join("hidden_dir/hidden.file");
     let super_hidden_path = path.super_hide();
     assert!(super_hidden_path.is_ok());
     assert_eq!(super_hidden_path.as_ref().unwrap(), &path);
