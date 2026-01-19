@@ -25,7 +25,7 @@ impl Hidden for PathBuf {
 
     fn try_into_hidden_path(&self) -> AreiaResult<PathBuf> {
         is_path_empty(&self)?;
-        if cfg!(windows) {
+        if cfg!(target_os = "windows") {
             return Err(AreiaError::MakingHiddenPathNotSupported(
                 "Unavailable on Windows".to_string(),
             ));    
@@ -36,7 +36,7 @@ impl Hidden for PathBuf {
 
     fn try_into_unhidden_path(&self) -> AreiaResult<PathBuf> {
         is_path_empty(&self)?;
-        if cfg!(windows) {
+        if cfg!(target_os = "windows") {
             Err(AreiaError::MakingHiddenPathNotSupported(
                 "Unavailable on Windows".to_string(),
             ))
