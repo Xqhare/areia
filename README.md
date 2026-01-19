@@ -187,7 +187,7 @@ A convenience function provided by the `Hidden` trait. \
 It has the same behavior as `hide` but does not create any files or directories. \
 It creates a new path with the last component hidden and returns it.
 
-This concept does not apply on Windows.
+> This concept does not apply on Windows.
 
 ```rust
 if cfg!(not(target_os = "windows")) {
@@ -205,7 +205,7 @@ if cfg!(not(target_os = "windows")) {
 
 ### Super Hidden
 
-> Super Hidden is supported on macOS and Windows - The concept doesn't apply on Linux.
+> Super Hidden is supported on macOS and Windows - The concept doesn't apply on Linux.\
 > See the `SuperHidden` documentation for more details.
 
 If the path doesn't exist:
@@ -294,7 +294,8 @@ if cfg!(not(target_os = "linux")) {
 
 The functions `auto_creator` and `auto_deleter` are provided for convenience.
 
-Especially the `auto_deletor` is very powerful and must be used with care. Please read the provided documentation directly on the function itself.
+> Especially the `auto_deletor` is very powerful and must be used with care.\
+> Please read the provided documentation directly on the function itself.
 
 ```rust
 use areia::{auto_creator, auto_deletor};
