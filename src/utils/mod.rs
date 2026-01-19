@@ -77,7 +77,49 @@ pub fn super_unhide(path: &mut PathBuf) -> AreiaResult<PathBuf> {
     ))
 }
 
+pub fn create_all_dir_with_file(path: &PathBuf) -> AreiaResult<()> {
+    if let Some(parent) = path.parent() {
+        std::fs::create_dir_all(parent)?;
+    }
+    std::fs::File::create(path)?;
+    Ok(())
+}
+
+pub fn delete_all_dir_with_files(path: &PathBuf) -> AreiaResult<()> {
+    if path.is_file() {
+        if let Some(parent) = path.parent() {
+            std::fs::remove_dir_all(parent)?;
+        } else {
+            std::fs::remove_file(path)?;
+        }
+    } else {
+        std::fs::remove_dir_all(path)?;
+    }
+    Ok(())
+}
+
+
 #[cfg(unix)]
 pub fn make_hidden_path(path: &PathBuf) -> PathBuf {
     os::make_hidden_path(path)
+}
+
+#[test]
+fn delete_and_create_all_dir_basics() {
+    let path = PathBuf::from("tmp_test_dir/test_file.txt");
+    let path2 = PathBuf::from("tmp_test_dir/test_file2.txt");
+    let test = create_all_dir_with_file(&path);
+    assert!(test.is_ok());
+    let test = create_all_dir_with_file(&path2);
+    assert!(test.is_ok());
+
+    assert!(&path.exists());
+    assert!(&path2.exists());
+    assert_eq!(&path.parent().unwrap(), &path2.parent().unwrap());
+
+    let test = delete_all_dir_with_files(&path);
+    assert!(test.is_ok());
+
+    assert!(!&path.exists());
+    assert!(!&path2.exists());
 }
