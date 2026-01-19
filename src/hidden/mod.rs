@@ -159,7 +159,7 @@ pub trait Hidden {
     /// # Errors
     ///
     /// Errors if the program has insufficient permissions to move the file or folder.
-    fn into_hidden_path(self) -> AreiaResult<PathBuf>;
+    fn into_hidden_path(&self) -> AreiaResult<PathBuf>;
 }
 
 pub trait SuperHidden {
@@ -280,7 +280,7 @@ pub trait SuperHidden {
     ///     let super_hidden_path = path.super_hide();
     ///     assert!(super_hidden_path.is_ok());
     ///     assert!(super_hidden_path.as_ref().unwrap().is_super_hidden().unwrap());
-    ///     let unhidden_path = super_hidden_path.as_ref().unwrap().super_unhide();
+    ///     let unhidden_path = super_hidden_path.unwrap().super_unhide();
     ///     assert!(unhidden_path.is_ok());
     ///     assert!(!unhidden_path.as_ref().unwrap().is_super_hidden().unwrap());
     ///     # if unhidden_path.as_ref().unwrap().exists() {
