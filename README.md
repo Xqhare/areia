@@ -183,11 +183,11 @@ assert!(std::fs::remove_dir(hidden_path.as_ref().unwrap().parent().unwrap()).is_
 
 #### `into_hidden_path`
 
+> This concept does not apply on Windows.
+
 A convenience function provided by the `Hidden` trait. \
 It has the same behavior as `hide` but does not create any files or directories. \
 It creates a new path with the last component hidden and returns it.
-
-> This concept does not apply on Windows.
 
 ```rust
 if cfg!(not(target_os = "windows")) {
@@ -406,7 +406,7 @@ assert!(!std::path::Path::new(path).exists());
 ## `BaseDirs` and `UserDirs` expected output
 
 <details>
-<summary>The tables below are taken from the [directories](https://crates.io/crates/directories) crate. Click for the full license.</summary>
+<summary>The tables below are taken from the directories crate. Click for the full license.</summary>
 
 Copyright (c) 2018 directories-rs contributors
 
