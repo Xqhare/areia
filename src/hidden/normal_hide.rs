@@ -1,9 +1,8 @@
 use std::path::PathBuf;
 
-use crate::{error::{AreiaError, AreiaResult}, utils::make_unhidden_path};
+use crate::error::{AreiaError, AreiaResult};
 #[cfg(unix)]
-use crate::utils::make_hidden_path;
-use crate::utils::{hide_path, unhide_path};
+use crate::utils::{hide_path, unhide_path, make_hidden_path, make_unhidden_path};
 
 use super::Hidden;
 
