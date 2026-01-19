@@ -53,7 +53,7 @@ pub fn unhide_file(path: &mut PathBuf) -> AreiaResult<PathBuf> {
         check_path.push(component);
         for dir in sys_dirs {
             if check_path.starts_with(dir) {
-                return Ok(path.clone())
+                return Err(AreiaError::HiddenFileInsideSystemDir(path))
             }
         }
     }
