@@ -57,9 +57,6 @@ if let Ok(base_dirs) = BaseDirs::new() {
     if let Some(state_dir) = base_dirs.state_dir() {
         assert!(state_dir.is_dir());
     }
-    
-} else {
-    println!("Failed to get base dirs");
 }
 ```
 
@@ -110,6 +107,7 @@ use std::path::PathBuf;
 
 let mut path = PathBuf::from("to_hide/some.file");
 let hidden_path = path.hide();
+
 if cfg!(target_os = "windows") {
     assert!(hidden_path.is_err());
 } else {
@@ -124,6 +122,7 @@ if cfg!(target_os = "windows") {
     assert!(unhidden_path.as_ref().unwrap().is_file());
     assert!(!unhidden_path.as_ref().unwrap().is_hidden().unwrap());
     assert_eq!(unhidden_path.as_ref().unwrap(), &path);
+
     // Cleanup created files
     assert!(std::fs::remove_file(unhidden_path.as_ref().unwrap()).is_ok());
     assert!(std::fs::remove_dir_all(unhidden_path.as_ref().unwrap().parent().unwrap()).is_ok());
@@ -173,8 +172,8 @@ assert!(hidden_path.as_ref().unwrap().exists());
 assert!(hidden_path.as_ref().unwrap().is_file());
 assert!(hidden_path.as_ref().unwrap().is_hidden().unwrap());
 
-let unhidden_path = hidden_path.as_ref().unwrap().clone().unhide();
 // Can't unhide a file inside a hidden system directory
+let unhidden_path = hidden_path.as_ref().unwrap().clone().unhide();
 assert!(unhidden_path.is_err());
 
 // Cleanup created files
@@ -265,6 +264,7 @@ if cfg!(not(target_os = "linux")) {
     assert!(unhidden_path.as_ref().unwrap().is_file());
     assert!(!unhidden_path.as_ref().unwrap().is_super_hidden().unwrap());
     assert_eq!(unhidden_path.as_ref().unwrap(), &path);
+
     // Cleanup created files
     assert!(std::fs::remove_file(unhidden_path.as_ref().unwrap()).is_ok());
     assert!(std::fs::remove_dir_all(unhidden_path.as_ref().unwrap().parent().unwrap()).is_ok());
@@ -317,8 +317,8 @@ if cfg!(not(target_os = "linux")) {
     assert!(super_hidden_path.as_ref().unwrap().is_file());
     assert!(super_hidden_path.as_ref().unwrap().is_super_hidden().unwrap());
 
-    let unhidden_path = super_hidden_path.as_ref().unwrap().clone().super_unhide();
     // Can't unhide a file inside a hidden system directory
+    let unhidden_path = super_hidden_path.as_ref().unwrap().clone().super_unhide();
     assert!(unhidden_path.is_err());
 
     // Cleanup created files
@@ -337,7 +337,9 @@ The functions `auto_creator` and `auto_deleter` are provided for convenience.
 ```rust
 use areia::{auto_creator, auto_deletor};
 use std::path::PathBuf;
+
 let path = PathBuf::from("test_dir/test_file.txt");
+
 assert!(auto_creator(&path).is_ok());
 assert!(&path.exists());
 assert!(auto_deletor(&path).is_ok());
@@ -350,6 +352,7 @@ They accept anything that implements `Into<PathBuf>`:
 use areia::{auto_creator, auto_deletor};
 
 let path = "str_test_dir/test_file.txt";
+
 assert!(auto_creator(path).is_ok());
 assert!(std::path::Path::new(path).exists());
 assert!(auto_deletor(path).is_ok());
