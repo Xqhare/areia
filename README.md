@@ -6,6 +6,8 @@ This zero-dependency Rust crate manages hidden config and state directories acro
 
 I want to shout out [dirs](https://crates.io/crates/dirs) and [directories](https://crates.io/crates/directories), as they inspired this crate!
 
+## Important notes
+
 All major Operating Systems (Windows, Linux, macOS) are supported.
 
 The crate is tested on Linux. It builds on Windows and macOS (on GitHub Actions) but I lack the capability to test them.
@@ -30,6 +32,290 @@ During designing and scoping the project, I also set my sights on implementing s
 ```toml
 [dependencies]
 areia = { git = "https://github.com/xqhare/areia" }
+```
+
+### BaseDirs
+
+```rust
+use areia::BaseDirs;
+
+if let Ok(base_dirs) = BaseDirs::new() {
+    assert!(base_dirs.home_dir().is_dir());
+    assert!(base_dirs.cache_dir().is_dir());
+    assert!(base_dirs.config_dir().is_dir());
+    assert!(base_dirs.config_local_dir().is_dir());
+    assert!(base_dirs.data_dir().is_dir());
+    assert!(base_dirs.data_local_dir().is_dir());
+    if let Some(executable_dir) = base_dirs.executable_dir() {
+        assert!(executable_dir.is_dir());
+    }
+    assert!(base_dirs.preference_dir().is_dir());
+    if let Some(runtime_dir) = base_dirs.runtime_dir() {
+        assert!(runtime_dir.is_dir());
+    }
+    if let Some(state_dir) = base_dirs.state_dir() {
+        assert!(state_dir.is_dir());
+    }
+    
+} else {
+    println!("Failed to get base dirs");
+}
+```
+
+### UserDirs
+
+```rust
+use areia::UserDirs;
+
+if let Ok(user_dirs) = UserDirs::new() {
+    assert!(user_dirs.home_dir().is_dir());
+    if let Some(audio_dir) = user_dirs.audio_dir() {
+        assert!(audio_dir.is_dir());
+    }
+    if let Some(desktop_dir) = user_dirs.desktop_dir() {
+        assert!(desktop_dir.is_dir());
+    }
+    if let Some(document_dir) = user_dirs.document_dir() {
+        assert!(document_dir.is_dir());
+    }
+    if let Some(download_dir) = user_dirs.download_dir() {
+        assert!(download_dir.is_dir());
+    }
+    if let Some(font_dir) = user_dirs.font_dir() {
+        assert!(font_dir.is_dir());
+    }
+    if let Some(picture_dir) = user_dirs.picture_dir() {
+        assert!(picture_dir.is_dir());
+    }
+    if let Some(public_dir) = user_dirs.public_dir() {
+        assert!(public_dir.is_dir());
+    }
+    if let Some(template_dir) = user_dirs.template_dir() {
+        assert!(template_dir.is_dir());
+    }
+    if let Some(video_dir) = user_dirs.video_dir() {
+        assert!(video_dir.is_dir());
+    }
+}
+```
+
+### Hidden
+
+If the path doesn't exist:
+
+```rust
+use areia::Hidden;
+use std::path::PathBuf;
+
+let mut path = PathBuf::from("to_hide/some.file");
+let hidden_path = path.hide();
+if cfg!(target_os = "windows") {
+    assert!(hidden_path.is_err());
+} else {
+    assert!(hidden_path.is_ok());
+    assert!(hidden_path.as_ref().unwrap().exists());
+    assert!(hidden_path.as_ref().unwrap().is_file());
+    assert!(hidden_path.as_ref().unwrap().is_hidden().unwrap());
+
+    let unhidden_path = hidden_path.as_ref().unwrap().clone().unhide();
+    assert!(unhidden_path.is_ok());
+    assert!(unhidden_path.as_ref().unwrap().exists() && !hidden_path.as_ref().unwrap().exists());
+    assert!(unhidden_path.as_ref().unwrap().is_file());
+    assert!(!unhidden_path.as_ref().unwrap().is_hidden().unwrap());
+    assert_eq!(unhidden_path.as_ref().unwrap(), &path);
+    // Cleanup created files
+    assert!(std::fs::remove_file(unhidden_path.as_ref().unwrap()).is_ok());
+    assert!(std::fs::remove_dir_all(unhidden_path.as_ref().unwrap().parent().unwrap()).is_ok());
+}
+```
+
+Or if the path already exists:
+
+```rust
+use areia::Hidden;
+use std::path::PathBuf;
+
+let mut path = PathBuf::from("real_dir/existing.file");
+assert!(std::fs::create_dir_all(&path.parent().unwrap()).is_ok());
+assert!(std::fs::File::create(&path).is_ok());
+
+let mut hidden_path = path.hide().unwrap();
+assert!(hidden_path.exists());
+assert!(hidden_path.is_file());
+assert!(hidden_path.is_hidden().unwrap());
+
+let unhidden_path = hidden_path.unhide().unwrap();
+assert!(unhidden_path.exists() && !hidden_path.exists());
+assert!(unhidden_path.is_file());
+assert!(!unhidden_path.is_hidden().unwrap());
+assert_eq!(unhidden_path, path);
+
+// cleanup created files
+assert!(std::fs::remove_file(&unhidden_path).is_ok());
+assert!(std::fs::remove_dir_all(&unhidden_path.parent().unwrap()).is_ok());
+```
+
+Or if the path is inside a hidden system directory:
+
+```rust
+use areia::{BaseDirs, Hidden};
+use std::path::PathBuf;
+
+let base_dirs = BaseDirs::new().unwrap();
+let cache_dir = PathBuf::from(base_dirs.cache_dir());
+
+let mut path = PathBuf::from(cache_dir.join("hidden_dir/hidden.file"));
+let hidden_path = path.hide();
+assert!(hidden_path.is_ok());
+assert_eq!(hidden_path.as_ref().unwrap(), &path);
+assert!(hidden_path.as_ref().unwrap().exists());
+assert!(hidden_path.as_ref().unwrap().is_file());
+assert!(hidden_path.as_ref().unwrap().is_hidden().unwrap());
+
+let unhidden_path = hidden_path.as_ref().unwrap().clone().unhide();
+// Can't unhide a file inside a hidden system directory
+assert!(unhidden_path.is_err());
+
+// Cleanup created files
+assert!(std::fs::remove_file(hidden_path.as_ref().unwrap()).is_ok());
+assert!(std::fs::remove_dir(hidden_path.as_ref().unwrap().parent().unwrap()).is_ok());
+```
+
+#### `into_hidden_path`
+
+A convenience function provided by the `Hidden` trait. \
+It has the same behavior as `hide` but does not create any files or directories. \
+It creates a new path with the last component hidden and returns it.
+
+This concept does not apply on Windows.
+
+```rust
+if cfg!(not(target_os = "windows")) {
+    use areia::Hidden;
+    use std::path::PathBuf;
+
+    let mut path = PathBuf::from("non_existing/some.file");
+    let hidden_path = path.into_hidden_path();
+    assert!(hidden_path.is_ok());
+    assert_eq!(hidden_path.as_ref().unwrap(), &PathBuf::from("non_existing/.some.file"));
+    assert!(!hidden_path.as_ref().unwrap().exists());
+    assert!(hidden_path.as_ref().unwrap().is_hidden().unwrap());
+}
+```
+
+### Super Hidden
+
+> Super Hidden is supported on macOS and Windows - The concept doesn't apply on Linux.
+> See the `SuperHidden` documentation for more details.
+
+If the path doesn't exist:
+
+```rust
+if cfg!(not(target_os = "linux")) {
+    use areia::SuperHidden;
+    use std::path::PathBuf;
+
+    let mut path = PathBuf::from("super_hide/some.file");
+    let super_hidden_path = path.super_hide();
+    assert!(super_hidden_path.is_ok());
+    assert!(super_hidden_path.as_ref().unwrap().exists());
+    assert!(super_hidden_path.as_ref().unwrap().is_file());
+    assert!(super_hidden_path.as_ref().unwrap().is_super_hidden().unwrap());
+
+    let unhidden_path = super_hidden_path.as_ref().unwrap().clone().super_unhide();
+    assert!(unhidden_path.is_ok());
+    assert!(unhidden_path.as_ref().unwrap().exists() && !super_hidden_path.as_ref().unwrap().exists());
+    assert!(unhidden_path.as_ref().unwrap().is_file());
+    assert!(!unhidden_path.as_ref().unwrap().is_super_hidden().unwrap());
+    assert_eq!(unhidden_path.as_ref().unwrap(), &path);
+    // Cleanup created files
+    assert!(std::fs::remove_file(unhidden_path.as_ref().unwrap()).is_ok());
+    assert!(std::fs::remove_dir_all(unhidden_path.as_ref().unwrap().parent().unwrap()).is_ok());
+}
+```
+
+Or if the path already exists:
+
+```rust
+if cfg!(not(target_os = "linux")) {
+    use areia::SuperHidden;
+    use std::path::PathBuf;
+
+    let mut path = PathBuf::from("any_dir/existing.file");
+    assert!(std::fs::create_dir_all(&path.parent().unwrap()).is_ok());
+    assert!(std::fs::File::create(&path).is_ok());
+
+    let mut super_hidden_path = path.super_hide().unwrap();
+    assert!(super_hidden_path.exists());
+    assert!(super_hidden_path.is_file());
+    assert!(super_hidden_path.is_super_hidden().unwrap());
+
+    let unhidden_path = super_hidden_path.super_unhide().unwrap();
+    assert!(unhidden_path.exists() && !super_hidden_path.exists());
+    assert!(unhidden_path.is_file());
+    assert!(!unhidden_path.is_super_hidden().unwrap());
+    assert_eq!(unhidden_path, path);
+
+    // cleanup created files
+    assert!(std::fs::remove_file(&unhidden_path).is_ok());
+    assert!(std::fs::remove_dir_all(&unhidden_path.parent().unwrap()).is_ok());
+}
+```
+
+Or if the path is inside a hidden system directory:
+
+```rust
+if cfg!(not(target_os = "linux")) {
+    use areia::{BaseDirs, SuperHidden};
+    use std::path::PathBuf;
+
+    let base_dirs = BaseDirs::new().unwrap();
+    let cache_dir = PathBuf::from(base_dirs.cache_dir());
+
+    let mut path = PathBuf::from(cache_dir.join("hidden_dir/hidden.file"));
+    let super_hidden_path = path.super_hide();
+    assert!(super_hidden_path.is_ok());
+    assert_eq!(super_hidden_path.as_ref().unwrap(), &path);
+    assert!(super_hidden_path.as_ref().unwrap().exists());
+    assert!(super_hidden_path.as_ref().unwrap().is_file());
+    assert!(super_hidden_path.as_ref().unwrap().is_super_hidden().unwrap());
+
+    let unhidden_path = super_hidden_path.as_ref().unwrap().clone().super_unhide();
+    // Can't unhide a file inside a hidden system directory
+    assert!(unhidden_path.is_err());
+
+    // Cleanup created files
+    assert!(std::fs::remove_file(super_hidden_path.as_ref().unwrap()).is_ok());
+    assert!(std::fs::remove_dir(super_hidden_path.as_ref().unwrap().parent().unwrap()).is_ok());
+}
+```
+
+### Auto-Creator and Auto-Deletor
+
+The functions `auto_creator` and `auto_deleter` are provided for convenience.
+
+Especially the `auto_deletor` is very powerful and must be used with care. Please read the provided documentation directly on the function itself.
+
+```rust
+use areia::{auto_creator, auto_deletor};
+use std::path::PathBuf;
+let path = PathBuf::from("test_dir/test_file.txt");
+assert!(auto_creator(&path).is_ok());
+assert!(&path.exists());
+assert!(auto_deletor(&path).is_ok());
+assert!(!&path.exists());
+```
+
+They accept anything that implements `Into<PathBuf>`:
+
+```rust
+use areia::{auto_creator, auto_deletor};
+
+let path = "str_test_dir/test_file.txt";
+assert!(auto_creator(path).is_ok());
+assert!(std::path::Path::new(path).exists());
+assert!(auto_deletor(path).is_ok());
+assert!(!std::path::Path::new(path).exists());
 ```
 
 ## Roadmap
@@ -92,19 +378,20 @@ areia = { git = "https://github.com/xqhare/areia" }
         - [x] Linux
         - [x] macOS
 - [ ] Stable Features
-    - [ ] Documentation
+    - [ ] Remove dev `unwraps`
+    - [x] Documentation
         - [x] Examples in all function documentation
-        - [ ] README
-            - [ ] Full usage examples
-    - [ ] Tests
+        - [x] README
+            - [x] Full usage examples
+    - [x] Tests
     - [x] Basic Hiding
     - [x] Atomic "Hide-and-Move"
     - [x] Super Hiding
         - [x] macOS Hybrid Support
         - [x] Windows "System" Flag
-- [ ] Nice-to-Haves
-    - [ ] Directory "Auto-Creator"
-    - [ ] Directory "Auto-Deletor"
+- [x] Nice-to-Haves
+    - [x] Directory "Auto-Creator"
+    - [x] Directory "Auto-Deletor"
 - [ ] after 1.0.0
     - [ ] `dotfile` path maker (No automatic file creation)
     - [ ] Support system level directories (maybe)
@@ -115,7 +402,7 @@ areia = { git = "https://github.com/xqhare/areia" }
             - [ ] Root Data
             - [ ] Root Config
 
-## Project Design (Can be deleted after 1.0.0)
+## `BaseDirs` and `UserDirs` expected output
 
 <details>
 <summary>The tables below are taken from the [directories](https://crates.io/crates/directories) crate. Click for the full license.</summary>
@@ -144,10 +431,6 @@ SOFTWARE.
 
 ### `BaseDirs`
 
-`BaseDirs` query the paths of user-invisible standard directories
-that have been defined according to the conventions of the operating system the library is running on.
-
-
 | Function name      | Value on Linux                                           | Value on Windows            | Value on macOS                      |
 |--------------------|----------------------------------------------------------| --------------------------- | ----------------------------------- |
 | `home_dir`         | `$HOME`                                                  | `{FOLDERID_Profile}`        | `$HOME`                             |
@@ -163,9 +446,6 @@ that have been defined according to the conventions of the operating system the 
 
 ### `UserDirs`
 
-The intended use case for `UserDirs` is to query the paths of user-facing standard directories
-that have been defined according to the conventions of the operating system the library is running on.
-
 | Function name    | Value on Linux                                                         | Value on Windows                 | Value on macOS                 |
 | ---------------- | ---------------------------------------------------------------------- | -------------------------------- | ------------------------------ |
 | `home_dir`       | `$HOME`                                                                | `{FOLDERID_Profile}`             | `$HOME`                        |
@@ -178,25 +458,4 @@ that have been defined according to the conventions of the operating system the 
 | `public_dir`     | `Some(XDG_PUBLICSHARE_DIR)`     or `None`                              | `Some({FOLDERID_Public})`        | `Some($HOME`/Public/`)`        |
 | `template_dir`   | `Some(XDG_TEMPLATES_DIR)`       or `None`                              | `Some({FOLDERID_Templates})`     | `None`                         | 
 | `video_dir`      | `Some(XDG_VIDEOS_DIR)`          or `None`                              | `Some({FOLDERID_Videos})`        | `Some($HOME`/Movies/`)`        |
-
-### 2. The "Stable Architecture" Features
-
-- Atomic "Hide-and-Move":
-    - A function that handles moving an existing visible directory to a hidden path while ensuring data isn't lost if the process is interrupted.
-- Super Hiding:
-    - macOS Hybrid Support:
-        - Adding an FFI call for chflags to set UF_HIDDEN. This makes the dotfile even more hidden on macOS (it won't show up in certain GUI search tools).
-    - Windows "System" Flag:
-        - Optionally adding FILE_ATTRIBUTE_SYSTEM (0x4) along with the Hidden flag. This makes the file/folder even harder to see in Windows Explorer (requires unchecking "Hide protected operating system files").
-
-### 3. The "Nice-to-Haves" (Professional Polish)
-
-- Directory "Auto-Creator":
-    - A function that runs fs::create_dir_all on a given path.
-    - Also inverse "Auto-Deleter"
-    - A convenience function - just pass in whatever path areia constructs.
-    - Also creates the file if it doesn't exist.
-- Directory "Auto-Deletor":
-    - A function that runs fs::remove_dir_all on a given path.
-    - Deletes all files inside the directories if any exists.
 
