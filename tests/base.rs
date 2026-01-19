@@ -1,5 +1,4 @@
 use areia::BaseDirs;
-use std::path::PathBuf;
 
 #[test]
 fn create_new_base() {
@@ -15,31 +14,30 @@ fn all_paths_present() {
     let base = base.unwrap();
 
     assert!(base.home_dir().is_absolute());
-    assert_ne!(base.home_dir(), &PathBuf::from(""));
-    assert_ne!(base.home_dir(), &PathBuf::from("/"));
+    assert!(base.home_dir().is_dir());
     assert!(base.cache_dir().is_absolute());
-    assert_ne!(base.cache_dir(), &PathBuf::from(""));
+    assert!(base.cache_dir().is_dir());
     assert!(base.config_dir().is_absolute());
-    assert_ne!(base.config_dir(), &PathBuf::from(""));
+    assert!(base.config_dir().is_dir());
     assert!(base.config_local_dir().is_absolute());
-    assert_ne!(base.config_local_dir(), &PathBuf::from(""));
+    assert!(base.config_local_dir().is_dir());
     assert!(base.data_dir().is_absolute());
-    assert_ne!(base.data_dir(), &PathBuf::from(""));
+    assert!(base.data_dir().is_dir());
     assert!(base.data_local_dir().is_absolute());
-    assert_ne!(base.data_local_dir(), &PathBuf::from(""));
+    assert!(base.data_local_dir().is_dir());
     assert!(base.executable_dir().is_some());
     assert!(base.executable_dir().unwrap().is_absolute());
-    assert_ne!(base.executable_dir().unwrap(), &PathBuf::from(""));
+    assert!(base.executable_dir().unwrap().is_dir());
     assert!(base.preference_dir().is_absolute());
-    assert_ne!(base.preference_dir(), &PathBuf::from(""));
+    assert!(base.preference_dir().is_dir());
     // Runtime may be set or not
     if base.runtime_dir().is_some() {
         assert!(base.runtime_dir().unwrap().is_absolute());
-        assert_ne!(base.runtime_dir().unwrap(), &PathBuf::from(""));
+        assert!(base.runtime_dir().unwrap().is_dir());
     }
     assert!(base.state_dir().is_some());
     assert!(base.state_dir().unwrap().is_absolute());
-    assert_ne!(base.state_dir().unwrap(), &PathBuf::from(""));
+    assert!(base.state_dir().unwrap().is_dir());
 }
 
 #[test]
@@ -50,21 +48,20 @@ fn all_paths_present() {
     let base = base.unwrap();
 
     assert!(base.home_dir().is_absolute());
-    assert_ne!(base.home_dir(), &PathBuf::from(""));
-    assert_ne!(base.home_dir(), &PathBuf::from("/"));
+    assert!(base.home_dir().is_dir());
     assert!(base.cache_dir().is_absolute());
-    assert_ne!(base.cache_dir(), &PathBuf::from(""));
+    assert!(base.cache_dir().is_dir());
     assert!(base.config_dir().is_absolute());
-    assert_ne!(base.config_dir(), &PathBuf::from(""));
+    assert!(base.config_dir().is_dir());
     assert!(base.config_local_dir().is_absolute());
-    assert_ne!(base.config_local_dir(), &PathBuf::from(""));
+    assert!(base.config_local_dir().is_dir());
     assert!(base.data_dir().is_absolute());
-    assert_ne!(base.data_dir(), &PathBuf::from(""));
+    assert!(base.data_dir().is_dir());
     assert!(base.data_local_dir().is_absolute());
-    assert_ne!(base.data_local_dir(), &PathBuf::from(""));
+    assert!(base.data_local_dir().is_dir());
     assert!(base.executable_dir().is_none());
     assert!(base.preference_dir().is_absolute());
-    assert_ne!(base.preference_dir(), &PathBuf::from(""));
+    assert!(base.preference_dir().is_dir());
     assert!(base.runtime_dir().is_none());
     assert!(base.state_dir().is_none());
 }
@@ -77,20 +74,20 @@ fn all_paths_present() {
     let base = base.unwrap();
 
     assert!(base.home_dir().is_absolute());
-    assert_ne!(base.home_dir(), &PathBuf::from(""));
+    assert!(base.home_dir().is_dir());
     assert!(base.cache_dir().is_absolute());
-    assert_ne!(base.cache_dir(), &PathBuf::from(""));
+    assert!(base.cache_dir().is_dir());
     assert!(base.config_dir().is_absolute());
-    assert_ne!(base.config_dir(), &PathBuf::from(""));
+    assert!(base.config_dir().is_dir());
     assert!(base.config_local_dir().is_absolute());
-    assert_ne!(base.config_local_dir(), &PathBuf::from(""));
+    assert!(base.config_local_dir().is_dir());
     assert!(base.data_dir().is_absolute());
-    assert_ne!(base.data_dir(), &PathBuf::from(""));
+    assert!(base.data_dir().is_dir());
     assert!(base.data_local_dir().is_absolute());
-    assert_ne!(base.data_local_dir(), &PathBuf::from(""));
+    assert!(base.data_local_dir().is_dir());
     assert!(base.executable_dir().is_none());
     assert!(base.preference_dir().is_absolute());
-    assert_ne!(base.preference_dir(), &PathBuf::from(""));
+    assert!(base.preference_dir().is_dir());
     assert!(base.runtime_dir().is_none());
     assert!(base.state_dir().is_none());
 }
