@@ -1,8 +1,8 @@
 #![cfg(not(target_os = "linux"))]
 
-use areia::{SuperHidden, BaseDirs};
+use areia::{BaseDirs, SuperHidden};
+use std::fs::{remove_dir, remove_dir_all, remove_file};
 use std::path::PathBuf;
-use std::fs::{remove_dir_all, remove_file, remove_dir};
 
 #[test]
 fn super_hide_non_existent_path() {
@@ -14,11 +14,19 @@ fn super_hide_non_existent_path() {
     assert!(super_hidden_path.is_ok());
     assert!(super_hidden_path.as_ref().unwrap().exists());
     assert!(super_hidden_path.as_ref().unwrap().is_file());
-    assert!(super_hidden_path.as_ref().unwrap().is_super_hidden().unwrap());
+    assert!(
+        super_hidden_path
+            .as_ref()
+            .unwrap()
+            .is_super_hidden()
+            .unwrap()
+    );
 
     let unhidden_path = super_hidden_path.as_ref().unwrap().clone().super_unhide();
     assert!(unhidden_path.is_ok());
-    assert!(unhidden_path.as_ref().unwrap().exists() && !super_hidden_path.as_ref().unwrap().exists());
+    assert!(
+        unhidden_path.as_ref().unwrap().exists() && !super_hidden_path.as_ref().unwrap().exists()
+    );
     assert!(unhidden_path.as_ref().unwrap().is_file());
     assert!(!unhidden_path.as_ref().unwrap().is_super_hidden().unwrap());
     assert_eq!(unhidden_path.as_ref().unwrap(), &path);
@@ -28,7 +36,7 @@ fn super_hide_non_existent_path() {
 }
 
 #[test]
-fn super_hide_existing_path() { 
+fn super_hide_existing_path() {
     use areia::SuperHidden;
     use std::path::PathBuf;
 
@@ -63,7 +71,13 @@ fn super_hide_already_hidden_path() {
     assert_eq!(super_hidden_path.as_ref().unwrap(), &path);
     assert!(super_hidden_path.as_ref().unwrap().exists());
     assert!(super_hidden_path.as_ref().unwrap().is_file());
-    assert!(super_hidden_path.as_ref().unwrap().is_super_hidden().unwrap());
+    assert!(
+        super_hidden_path
+            .as_ref()
+            .unwrap()
+            .is_super_hidden()
+            .unwrap()
+    );
 
     let unhidden_path = super_hidden_path.as_ref().unwrap().clone().super_unhide();
     // Can't unhide a file inside a hidden system directory

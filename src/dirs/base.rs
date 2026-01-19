@@ -59,7 +59,7 @@ impl BaseDirs {
     /// ```
     ///
     /// # Errors
-    /// 
+    ///
     /// Returns an `AreiaError` if the home directory could not be found or an OS error occurred
     pub fn new() -> AreiaResult<BaseDirs> {
         base_dirs()

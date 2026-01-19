@@ -106,4 +106,3 @@ fn all_paths_present() {
     assert!(user.video_dir().is_some());
     assert!(user.video_dir().as_ref().unwrap().is_dir());
 }
-

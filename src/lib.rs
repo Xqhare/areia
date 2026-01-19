@@ -6,8 +6,8 @@ mod utils;
 
 pub mod error;
 
-use std::path::PathBuf;
 use error::{AreiaError, AreiaResult};
+use std::path::PathBuf;
 use utils::{create_all_dir_with_file, delete_all_dir_with_files};
 
 pub use dirs::{BaseDirs, UserDirs};

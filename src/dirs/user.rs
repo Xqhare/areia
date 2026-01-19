@@ -53,12 +53,12 @@ impl UserDirs {
     /// ```
     ///
     /// # Errors
-    /// 
+    ///
     /// Returns an `AreiaError` if the home directory could not be found or an OS error occurred
     pub fn new() -> AreiaResult<UserDirs> {
         user_dirs()
     }
-    
+
     /// Get the home directory
     ///
     /// | Linux | Windows | macOS |
@@ -84,7 +84,7 @@ impl UserDirs {
     /// | `Some($XDG_MUSIC_DIR)` OR `None` | `Some({FolderID::Music})` | `Some($HOME/Music)` |
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
@@ -104,7 +104,7 @@ impl UserDirs {
     /// | `Some($XDG_DESKTOP_DIR)` OR `None` | `Some({FolderID::Desktop})` | `Some($HOME/Desktop)` |
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
@@ -124,7 +124,7 @@ impl UserDirs {
     /// | `Some($XDG_DOCUMENTS_DIR)` OR `None` | `Some({FolderID::Documents})` | `Some($HOME/Documents)` |
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
@@ -144,7 +144,7 @@ impl UserDirs {
     /// | `Some($XDG_DOWNLOAD_DIR)` OR `None` | `Some({FolderID::Downloads})` | `Some($HOME/Downloads)` |
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
@@ -164,7 +164,7 @@ impl UserDirs {
     /// | `Some($XDG_DATA_HOME/fonts)` OR `Some($HOME/.local/share/fonts)` | `None` | `Some($HOME/Library/Fonts)` |
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
@@ -184,7 +184,7 @@ impl UserDirs {
     /// | `Some($XDG_PICTURES_DIR)` OR `None` | `Some({FolderID::Pictures})` | `Some($HOME/Pictures)` |
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
@@ -204,7 +204,7 @@ impl UserDirs {
     /// | `Some($XDG_PUBLICSHARE_DIR)` OR `None` | `Some({FolderID::Public})` | `Some($HOME/Public)` |
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
@@ -224,7 +224,7 @@ impl UserDirs {
     /// | `Some($XDG_TEMPLATES_DIR)` OR `None` | `Some({FolderID::Templates})` | `None` |
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
@@ -244,7 +244,7 @@ impl UserDirs {
     /// | `Some($XDG_VIDEOS_DIR)` OR `None` | `Some({FolderID::Videos})` | `Some($HOME/Movies)` |
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();

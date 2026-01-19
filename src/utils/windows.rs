@@ -1,5 +1,5 @@
-use crate::error::{AreiaError, AreiaResult};
 use crate::BaseDirs;
+use crate::error::{AreiaError, AreiaResult};
 use std::path::PathBuf;
 
 use super::ffi::windows;
@@ -53,7 +53,7 @@ pub fn unhide_file(path: &mut PathBuf) -> AreiaResult<PathBuf> {
         check_path.push(component);
         for dir in sys_dirs {
             if check_path.starts_with(dir) {
-                return Err(AreiaError::HiddenFileInsideSystemDir(path))
+                return Err(AreiaError::HiddenFileInsideSystemDir(path));
             }
         }
     }

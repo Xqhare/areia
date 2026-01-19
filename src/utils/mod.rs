@@ -98,7 +98,6 @@ pub fn delete_all_dir_with_files(path: &PathBuf) -> AreiaResult<()> {
     Ok(())
 }
 
-
 #[cfg(unix)]
 pub fn make_hidden_path(path: &PathBuf) -> PathBuf {
     os::make_hidden_path(path)

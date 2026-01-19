@@ -1,6 +1,6 @@
-use areia::{Hidden, BaseDirs};
+use areia::{BaseDirs, Hidden};
+use std::fs::{remove_dir, remove_dir_all, remove_file};
 use std::path::PathBuf;
-use std::fs::{remove_dir_all, remove_file, remove_dir};
 
 #[test]
 fn hide_non_existent_path() {
@@ -16,7 +16,9 @@ fn hide_non_existent_path() {
 
         let unhidden_path = hidden_path.as_ref().unwrap().clone().unhide();
         assert!(unhidden_path.is_ok());
-        assert!(unhidden_path.as_ref().unwrap().exists() && !hidden_path.as_ref().unwrap().exists());
+        assert!(
+            unhidden_path.as_ref().unwrap().exists() && !hidden_path.as_ref().unwrap().exists()
+        );
         assert!(unhidden_path.as_ref().unwrap().is_file());
         assert!(!unhidden_path.as_ref().unwrap().is_hidden().unwrap());
         assert_eq!(unhidden_path.as_ref().unwrap(), &path);
@@ -79,7 +81,10 @@ fn into_hidden() {
         let mut path = PathBuf::from("non_existing/some.file");
         let hidden_path = path.into_hidden_path();
         assert!(hidden_path.is_ok());
-        assert_eq!(hidden_path.as_ref().unwrap(), &PathBuf::from("non_existing/.some.file"));
+        assert_eq!(
+            hidden_path.as_ref().unwrap(),
+            &PathBuf::from("non_existing/.some.file")
+        );
         assert!(!hidden_path.as_ref().unwrap().exists());
         assert!(hidden_path.as_ref().unwrap().is_hidden().unwrap());
     } else {
