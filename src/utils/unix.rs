@@ -73,7 +73,7 @@ pub fn make_hidden_path(path: &PathBuf) -> PathBuf {
             ".{}",
             new_path
                 .file_name()
-                .unwrap()
+                .expect("Path must have a file name")
                 .to_str()
                 .expect("Unix path is valid UTF-8 by convention")
         ));

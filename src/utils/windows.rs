@@ -40,7 +40,8 @@ pub fn unhide_file(path: &mut PathBuf) -> AreiaResult<PathBuf> {
     // need to check if inside hidden directory
     // if yes, do nothing, and return path
     let mut sys_dirs = Vec::new();
-    let base_dirs = BaseDirs::new().unwrap();
+        
+    let base_dirs = BaseDirs::new()?;
     sys_dirs.push(base_dirs.cache_dir());
     sys_dirs.push(base_dirs.config_dir());
     sys_dirs.push(base_dirs.config_local_dir());
