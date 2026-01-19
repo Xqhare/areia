@@ -15,9 +15,9 @@ The crate is tested on Linux. It builds on Windows and macOS (on GitHub Actions)
 ## Features
 
 - Get paths to standard directories (e.g. `home`, `cache`, etc.)
-- Create hidden paths (Unix only)
-- Create hidden files / directories
-- Create super hidden files / directories
+- Create or unhide hidden paths (Unix only)
+- Create or unhide hidden files / directories
+- Create or unhide super hidden files / directories
 - Zero Dependencies
 - Auto-Creator and Auto-Deletor for nested directories
 
@@ -182,9 +182,11 @@ assert!(std::fs::remove_file(hidden_path.as_ref().unwrap()).is_ok());
 assert!(std::fs::remove_dir(hidden_path.as_ref().unwrap().parent().unwrap()).is_ok());
 ```
 
-#### `into_hidden_path`
+#### `try_into`
 
 > This concept does not apply on Windows.
+
+##### `try_into_hidden_path`
 
 A convenience function provided by the `Hidden` trait. \
 It has the same behavior as `hide` but does not create any files or directories. \
@@ -196,11 +198,45 @@ if cfg!(not(target_os = "windows")) {
     use std::path::PathBuf;
 
     let mut path = PathBuf::from("non_existing/some.file");
-    let hidden_path = path.into_hidden_path();
+    let hidden_path = path.try_into_hidden_path();
     assert!(hidden_path.is_ok());
     assert_eq!(hidden_path.as_ref().unwrap(), &PathBuf::from("non_existing/.some.file"));
     assert!(!hidden_path.as_ref().unwrap().exists());
     assert!(hidden_path.as_ref().unwrap().is_hidden().unwrap());
+
+    let mut path2 = PathBuf::from("a_dir/");
+    let hidden_path2 = path2.try_into_hidden_path();
+    assert!(hidden_path2.is_ok());
+    assert_eq!(hidden_path2.as_ref().unwrap(), &PathBuf::from(".a_dir/"));
+    assert!(!hidden_path2.as_ref().unwrap().exists());
+    assert!(hidden_path2.as_ref().unwrap().is_hidden().unwrap());
+}
+```
+
+##### `try_into_unhidden_path`
+
+A convenience function provided by the `Hidden` trait. \
+It has the same behavior as `unhide` but does not create any files or directories. \
+It creates a new path with the last component unhidden and returns it.
+
+```rust
+if cfg!(not(target_os = "windows")) {
+    use areia::Hidden;
+    use std::path::PathBuf;
+
+    let path = PathBuf::from("non_existing/.some.file");
+    let unhidden_path = path.try_into_unhidden_path();
+    assert!(unhidden_path.is_ok());
+    assert_eq!(unhidden_path.as_ref().unwrap(), &PathBuf::from("non_existing/some.file"));
+    assert!(!unhidden_path.as_ref().unwrap().exists());
+    assert!(!unhidden_path.as_ref().unwrap().is_hidden().unwrap());
+
+    let path2 = PathBuf::from(".a_dir/");
+    let unhidden_path2 = path2.try_into_unhidden_path();
+    assert!(unhidden_path2.is_ok());
+    assert_eq!(unhidden_path2.as_ref().unwrap(), &PathBuf::from("a_dir/"));
+    assert!(!unhidden_path2.as_ref().unwrap().exists());
+    assert!(!unhidden_path2.as_ref().unwrap().is_hidden().unwrap());
 }
 ```
 
@@ -379,8 +415,8 @@ assert!(!std::path::Path::new(path).exists());
         - [x] Windows
         - [x] Linux
         - [x] macOS
-- [ ] Stable Features
-    - [ ] Remove dev `unwraps`
+- [x] Stable Features
+    - [x] Remove dev `unwraps`
     - [x] Documentation
         - [x] Examples in all function documentation
         - [x] README
@@ -395,7 +431,7 @@ assert!(!std::path::Path::new(path).exists());
     - [x] Directory "Auto-Creator"
     - [x] Directory "Auto-Deletor"
 - [ ] after 1.0.0
-    - [ ] `dotfile` path maker (No automatic file creation)
+    - [x] `dotfile` path maker (No automatic file creation)
     - [ ] Support system level directories (maybe)
         - [ ] Windows
             - [ ] ProgramFiles
