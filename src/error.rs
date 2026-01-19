@@ -8,6 +8,7 @@ type Reason = String;
 
 #[derive(Debug)]
 pub enum AreiaError {
+    PathMustBeAbsolute(PathBuf),
     PathMustBeSomething(PathBuf),
     FileDoesNotExist(PathBuf),
     CantGetHomeDir,
@@ -31,6 +32,9 @@ impl From<std::io::Error> for AreiaError {
 impl std::fmt::Display for AreiaError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            AreiaError::PathMustBeAbsolute(path) => {
+                write!(f, "Path must be absolute: {:?}", path)
+            }
             AreiaError::CantGetHomeDir => write!(f, "Can't get home directory"),
             AreiaError::FileDoesNotExist(path) => write!(f, "File does not exist: {:?}", path),
             AreiaError::PathMustBeSomething(path) => {
