@@ -1,4 +1,5 @@
 use crate::error::{AreiaError, AreiaResult};
+use crate::BaseDirs;
 use std::path::PathBuf;
 
 use super::ffi::windows;
@@ -35,13 +36,40 @@ pub fn unhide_file(path: &mut PathBuf) -> AreiaResult<PathBuf> {
     if !path.exists() {
         return Err(AreiaError::FileDoesNotExist(path.to_path_buf()));
     }
+
+    // need to check if inside hidden directory
+    // if yes, do nothing, and return path
+    let mut sys_dirs = Vec::new();
+    let base_dirs = BaseDirs::new().unwrap();
+    sys_dirs.push(base_dirs.cache_dir());
+    sys_dirs.push(base_dirs.config_dir());
+    sys_dirs.push(base_dirs.config_local_dir());
+    sys_dirs.push(base_dirs.data_dir());
+    sys_dirs.push(base_dirs.data_local_dir());
+    sys_dirs.push(base_dirs.preference_dir());
+
+    let mut check_path = PathBuf::new();
+    for component in path.components() {
+        check_path.push(component);
+        for dir in sys_dirs {
+            if check_path.starts_with(dir) {
+                return Ok(path.clone())
+            }
+        }
+    }
     windows::unhide(path)?;
     Ok(path.clone())
 }
 
-/// Checks only the file pointed to, not the entire path like with unix
+/// Checks not only the file pointed to, but also all components
 pub fn is_any_component_hidden(path: &PathBuf) -> AreiaResult<bool> {
-    windows::is_hidden(path)
+    let mut tmp = PathBuf::new();
+    for component in path.components() {
+        tmp.push(component);
+        if windows::is_hidden(&tmp)? {
+            return Ok(true);
+        }
+    }
 }
 
 pub fn is_superhidden(path: &PathBuf) -> AreiaResult<bool> {
