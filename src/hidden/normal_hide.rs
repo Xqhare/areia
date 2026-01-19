@@ -25,28 +25,22 @@ impl Hidden for PathBuf {
 
     fn try_into_hidden_path(&self) -> AreiaResult<PathBuf> {
         is_path_empty(&self)?;
-        if cfg!(target_os = "windows") {
-            return Err(AreiaError::MakingHiddenPathNotSupported(
-                "Unavailable on Windows".to_string(),
-            ));    
-        } 
-        if cfg!(not(target_os = "windows")) {
-            return Ok(make_hidden_path(&self));
-        }
-        unreachable!("Only Linux, macOS and Windows are supported")
+        #[cfg(target_os = "windows")]
+        return Err(AreiaError::MakingHiddenPathNotSupported(
+            "Unavailable on Windows".to_string(),
+        )); 
+        #[cfg(not(target_os = "windows"))]
+        return Ok(make_hidden_path(&self));
     }
 
     fn try_into_unhidden_path(&self) -> AreiaResult<PathBuf> {
         is_path_empty(&self)?;
-        if cfg!(target_os = "windows") {
-            return Err(AreiaError::MakingHiddenPathNotSupported(
-                "Unavailable on Windows".to_string(),
-            ));
-        } 
-        if cfg!(not(target_os = "windows")) {
-            return make_unhidden_path(&self);
-        }
-        unreachable!("Only Linux, macOS and Windows are supported")
+        #[cfg(target_os = "windows")]
+        return Err(AreiaError::MakingHiddenPathNotSupported(
+            "Unavailable on Windows".to_string(),
+        ));
+        #[cfg(not(target_os = "windows"))]
+        return make_unhidden_path(&self);
     }
 }
 
