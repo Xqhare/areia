@@ -19,6 +19,7 @@ The crate is tested on Linux. It builds on Windows and macOS (on GitHub Actions)
 - Create hidden files / directories
 - Create super hidden files / directories
 - Zero Dependencies
+- Auto-Creator and Auto-Deletor for nested directories
 
 ## Motivation
 
