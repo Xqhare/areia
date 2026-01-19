@@ -21,6 +21,22 @@ The crate is tested on Linux. It builds on Windows and macOS (on GitHub Actions)
 - Zero Dependencies
 - Auto-Creator and Auto-Deletor for nested directories
 
+## Roadmap
+
+- [ ] Support system level directories
+    - [ ] Windows
+        - [ ] Program Files (x86) (FolderID: {7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}) (not x64: x86 has the same expected output on 64bit machines, if the app is 32 or 64 bit.)
+        - [ ] Program Data (FolderID: {62AB5D82-FDC1-4DC3-A9DD-070D1D495D97})
+        - [ ] System Drive (No FolderID, always parent of Program Data)
+        - [ ] Fonts (inside `UserDirs` - even though on Windows its system level, unifies my API nicely) (FolderID: {FD228CB7-AE11-4AE3-864C-16F3910AB8FE})
+    - [ ] Unix
+    	- [ ] Root (System Drive equivalent)
+        - [ ] Root Bin (Program Files equivalent)
+        - [ ] Root Data (Program Data equivalent)
+        - [ ] Root Config (No equivalent)
+- [ ] Nice-to-Haves
+    - [ ] Implement `ProjectDirs` as in the directories crate (for full feature parity)
+
 ## Motivation
 
 The main reason for writing this, was as always, the zero external Dependencies goal. Along with that, I also really wanted to play around with supporting different operating system architectures again.\
@@ -358,90 +374,6 @@ assert!(std::path::Path::new(path).exists());
 assert!(auto_deletor(path).is_ok());
 assert!(!std::path::Path::new(path).exists());
 ```
-
-## Roadmap
-
-- [x] Core Functionality
-    - [x] Environment Variable Resolution
-        - [x] Linux
-            - [x] Home
-            - [x] Cache
-            - [x] Config
-            - [x] Local
-                - [x] Data
-                - [x] State
-                - [x] Bin
-            - [x] Audio
-            - [x] Desktop
-            - [x] Document
-            - [x] Download
-            - [x] Font
-            - [x] Picture
-            - [x] Public
-            - [x] Template
-            - [x] Video
-        - [x] Windows
-            - [x] Home
-            - [x] Cache
-            - [x] Config
-            - [x] Local
-                - [x] Data
-                - [x] State
-                - [x] Bin
-            - [x] Audio
-            - [x] Desktop
-            - [x] Document
-            - [x] Download
-            - [x] Font
-            - [x] Picture
-            - [x] Public
-            - [x] Template
-            - [x] Video
-        - [x] macOS
-            - [x] Home
-            - [x] Cache
-            - [x] Config
-            - [x] Local
-                - [x] Data
-                - [x] State
-                - [x] Bin
-            - [x] Audio
-            - [x] Desktop
-            - [x] Document
-            - [x] Download
-            - [x] Font
-            - [x] Picture
-            - [x] Public
-            - [x] Template
-            - [x] Video
-    - [x] Platform-Specific "Hide" Implementation
-        - [x] Windows
-        - [x] Linux
-        - [x] macOS
-- [x] Stable Features
-    - [x] Remove dev `unwraps`
-    - [x] Documentation
-        - [x] Examples in all function documentation
-        - [x] README
-            - [x] Full usage examples
-    - [x] Tests
-    - [x] Basic Hiding
-    - [x] Atomic "Hide-and-Move"
-    - [x] Super Hiding
-        - [x] macOS Hybrid Support
-        - [x] Windows "System" Flag
-- [x] Nice-to-Haves
-    - [x] Directory "Auto-Creator"
-    - [x] Directory "Auto-Deletor"
-- [ ] after 1.0.0
-    - [x] `dotfile` path maker (No automatic file creation)
-    - [ ] Support system level directories (maybe)
-        - [ ] Windows
-            - [ ] ProgramFiles
-        - [ ] Unix
-            - [ ] Root Bin
-            - [ ] Root Data
-            - [ ] Root Config
 
 ## `BaseDirs` and `UserDirs` expected output
 
