@@ -83,8 +83,7 @@ pub fn executable_dir(home: PathBuf) -> Option<PathBuf> {
         if home.join(".local/bin").exists() {
             Some(home.join(".local/bin"))
         } else {
-            // Judging by the `directories` source code, `home.join` should always return a valid path
-            unreachable!("Executable directory could not be found!");
+            None
         }
     }
 }
