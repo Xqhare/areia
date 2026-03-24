@@ -1,9 +1,11 @@
+#![warn(clippy::all)]
+#![warn(clippy::pedantic)]
 #![doc = include_str!("../README.md")]
 
+mod autos;
 mod dirs;
 mod hidden;
 mod utils;
-mod autos;
 
 pub mod error;
 
