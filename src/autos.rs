@@ -1,7 +1,6 @@
-
-use std::path::PathBuf;
 use crate::error::AreiaResult;
 use crate::utils::{create_all_dir_with_file, delete_all_dir_with_files};
+use std::path::PathBuf;
 
 /// Convenience function to create a directory with a file in it.
 /// All parent directories are created if they do not exist.
@@ -12,7 +11,7 @@ use crate::utils::{create_all_dir_with_file, delete_all_dir_with_files};
 /// # use areia::auto_deletor;
 /// use areia::auto_creator;
 /// use std::path::PathBuf;
-/// let path = PathBuf::from("test_dir/test_file.txt");
+/// let path = PathBuf::from("a_test_dir/testing_file.txt");
 /// assert!(auto_creator(&path).is_ok());
 /// assert!(&path.exists());
 /// # assert!(auto_deletor(&path).is_ok());
@@ -63,7 +62,7 @@ pub fn auto_creator<P: Into<PathBuf>>(path: P) -> AreiaResult<()> {
 /// ```
 /// use areia::{auto_creator, auto_deletor};
 /// use std::path::PathBuf;
-/// let path = PathBuf::from("testing_dir/test_file.txt");
+/// let path = PathBuf::from("another_testing_dir/test_file.txt");
 /// assert!(auto_creator(&path).is_ok());
 /// assert!(&path.exists());
 /// assert!(auto_deletor(&path).is_ok());
