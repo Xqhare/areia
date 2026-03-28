@@ -115,6 +115,7 @@ pub fn unhide_file(path: &PathBuf) -> AreiaResult<PathBuf> {
     if !is_any_component_hidden(&old_path).expect("Always Ok") {
         return Ok(old_path);
     }
+    println!("DOG");
 
     // check if any path is equal to a system directory
     // - On mac:
@@ -150,6 +151,7 @@ pub fn unhide_file(path: &PathBuf) -> AreiaResult<PathBuf> {
             }
         }
     }
+    println!("DOG");
 
     // check for the first hidden component, remove the leading dot, reconstruct the path
     let mut new_components = Vec::new();
@@ -169,9 +171,11 @@ pub fn unhide_file(path: &PathBuf) -> AreiaResult<PathBuf> {
     }
     new_path = PathBuf::from_iter(new_components);
 
+    println!("DOG");
     if old_path.exists() {
         atomic_move(&old_path, &new_path)?;
     }
+    println!("DOG");
     return Ok(new_path);
 }
 
