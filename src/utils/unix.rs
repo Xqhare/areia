@@ -4,7 +4,7 @@ use std::{
 };
 
 use crate::{
-    BaseDirs, Hidden, UserDirs,
+    BaseDirs, Hidden,
     error::{AreiaError, AreiaResult},
 };
 
