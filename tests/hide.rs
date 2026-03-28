@@ -15,6 +15,7 @@ fn hide_non_existent_path() {
         assert!(hidden_path.as_ref().unwrap().is_hidden().unwrap());
 
         let unhidden_path = hidden_path.as_ref().unwrap().clone().unhide();
+        println!("{:?}", unhidden_path);
         assert!(unhidden_path.is_ok());
         assert!(
             unhidden_path.as_ref().unwrap().exists() && !hidden_path.as_ref().unwrap().exists()
@@ -98,7 +99,10 @@ fn into_unhidden() {
     let path = PathBuf::from("unreal/.some.file");
     let unhidden_path = path.try_into_unhidden_path();
     assert!(unhidden_path.is_ok());
-    assert_eq!(unhidden_path.as_ref().unwrap(), &PathBuf::from("unreal/some.file"));
+    assert_eq!(
+        unhidden_path.as_ref().unwrap(),
+        &PathBuf::from("unreal/some.file")
+    );
     assert!(!unhidden_path.as_ref().unwrap().exists());
     assert!(!unhidden_path.as_ref().unwrap().is_hidden().unwrap());
 
