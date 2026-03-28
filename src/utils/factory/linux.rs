@@ -208,7 +208,11 @@ fn xdg_user_dir_parsing() {
     let home = env::var_os("HOME").unwrap();
     let home_path = PathBuf::from(home.clone());
 
-    let dirs = get_usr_dirs(home).unwrap();
+    let dirs = get_usr_dirs(home);
+    if dirs.is_err() {
+        panic!("{}", dirs.unwrap_err());
+    }
+    let dirs = dirs.unwrap();
     assert_eq!(dirs.len(), 9);
 
     assert_eq!(
