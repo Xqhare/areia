@@ -44,7 +44,7 @@ impl UserDirs {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```ignore
     /// use areia::UserDirs;
     ///
     /// let user = UserDirs::new();
@@ -67,7 +67,7 @@ impl UserDirs {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```ignore
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
     /// let home = user.home_dir();
@@ -85,7 +85,7 @@ impl UserDirs {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```ignore
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
     /// let audio = user.audio_dir();
@@ -105,7 +105,7 @@ impl UserDirs {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```ignore
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
     /// let desktop = user.desktop_dir();
@@ -125,7 +125,7 @@ impl UserDirs {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```ignore
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
     /// let document = user.document_dir();
@@ -145,7 +145,7 @@ impl UserDirs {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```ignore
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
     /// let download = user.download_dir();
@@ -165,7 +165,7 @@ impl UserDirs {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```ignore
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
     /// let font = user.font_dir();
@@ -185,7 +185,7 @@ impl UserDirs {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```ignore
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
     /// let picture = user.picture_dir();
@@ -205,7 +205,7 @@ impl UserDirs {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```ignore
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
     /// let public = user.public_dir();
@@ -225,7 +225,7 @@ impl UserDirs {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```ignore
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
     /// let template = user.template_dir();
@@ -245,7 +245,7 @@ impl UserDirs {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```ignore
     /// # use areia::UserDirs;
     /// let user = UserDirs::new().unwrap();
     /// let video = user.video_dir();

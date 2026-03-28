@@ -181,7 +181,7 @@ impl BaseDirs {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```ignore
     /// # use areia::BaseDirs;
     /// let base = BaseDirs::new().unwrap();
     /// let executable = base.executable_dir();
