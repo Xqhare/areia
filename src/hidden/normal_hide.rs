@@ -15,6 +15,7 @@ impl Hidden for PathBuf {
 
     fn hide(&mut self) -> AreiaResult<PathBuf> {
         is_path_empty(&self)?;
+        println!("DOG DOG");
         hide_path(self)
     }
 
@@ -28,7 +29,7 @@ impl Hidden for PathBuf {
         #[cfg(target_os = "windows")]
         return Err(AreiaError::MakingHiddenPathNotSupported(
             "Unavailable on Windows".to_string(),
-        )); 
+        ));
         #[cfg(not(target_os = "windows"))]
         return Ok(make_hidden_path(&self));
     }
