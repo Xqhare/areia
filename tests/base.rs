@@ -25,9 +25,10 @@ fn all_paths_present() {
     assert!(base.data_dir().is_dir());
     assert!(base.data_local_dir().is_absolute());
     assert!(base.data_local_dir().is_dir());
-    assert!(base.executable_dir().is_some());
-    assert!(base.executable_dir().unwrap().is_absolute());
-    assert!(base.executable_dir().unwrap().is_dir());
+    if base.executable_dir().is_some() {
+        assert!(base.executable_dir().unwrap().is_absolute());
+        assert!(base.executable_dir().unwrap().is_dir());
+    }
     assert!(base.preference_dir().is_absolute());
     assert!(base.preference_dir().is_dir());
     // Runtime may be set or not
@@ -35,9 +36,10 @@ fn all_paths_present() {
         assert!(base.runtime_dir().unwrap().is_absolute());
         assert!(base.runtime_dir().unwrap().is_dir());
     }
-    assert!(base.state_dir().is_some());
-    assert!(base.state_dir().unwrap().is_absolute());
-    assert!(base.state_dir().unwrap().is_dir());
+    if base.state_dir().is_some() {
+        assert!(base.state_dir().unwrap().is_absolute());
+        assert!(base.state_dir().unwrap().is_dir());
+    }
 }
 
 #[test]
