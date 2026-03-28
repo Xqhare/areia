@@ -115,7 +115,6 @@ pub fn unhide_file(path: &PathBuf) -> AreiaResult<PathBuf> {
     if !is_any_component_hidden(&old_path).expect("Always Ok") {
         return Ok(old_path);
     }
-    println!("DOG - start");
 
     // check if any path is equal to a system directory
     // - On mac:
@@ -125,9 +124,6 @@ pub fn unhide_file(path: &PathBuf) -> AreiaResult<PathBuf> {
     //     - Of all `UserDir` only font is hidden
     if cfg!(target_os = "linux") {
         let base_dirs = BaseDirs::new()?;
-        println!("DOG");
-        let user_dirs = UserDirs::new()?;
-        println!("DOG");
         let mut system_dirs = Vec::new();
 
         system_dirs.push(base_dirs.cache_dir());
@@ -140,10 +136,6 @@ pub fn unhide_file(path: &PathBuf) -> AreiaResult<PathBuf> {
             system_dirs.push(path);
         }
         if let Some(path) = base_dirs.executable_dir() {
-            system_dirs.push(path);
-        }
-
-        if let Some(path) = user_dirs.font_dir() {
             system_dirs.push(path);
         }
 
