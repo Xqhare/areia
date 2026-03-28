@@ -15,7 +15,6 @@ impl Hidden for PathBuf {
 
     fn hide(&mut self) -> AreiaResult<PathBuf> {
         is_path_empty(&self)?;
-        println!("DOG DOG");
         hide_path(self)
     }
 

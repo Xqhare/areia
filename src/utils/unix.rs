@@ -4,7 +4,8 @@ use std::{
 };
 
 use crate::{
-    error::{AreiaError, AreiaResult}, BaseDirs, Hidden, UserDirs
+    BaseDirs, Hidden, UserDirs,
+    error::{AreiaError, AreiaResult},
 };
 
 use super::{create_all_dir_with_file, ffi::unix::get_unix_home_fallback};
@@ -95,12 +96,16 @@ pub fn hide_file(path: &PathBuf) -> AreiaResult<PathBuf> {
         }
         return Ok(path.clone());
     }
+    println!("DOG");
     let old_path = path.clone();
     let new_path = make_hidden_path(&path);
+    println!("DOG");
     if !old_path.exists() {
         create_all_dir_with_file(&old_path)?;
     }
+    println!("DOG");
     atomic_move(&old_path, &new_path)?;
+    println!("DOG");
     Ok(new_path)
 }
 
