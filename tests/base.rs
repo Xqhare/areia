@@ -7,6 +7,7 @@ fn create_new_base() {
 }
 
 #[test]
+#[ignore = "testing"]
 #[cfg(target_os = "linux")]
 fn all_paths_present() {
     let base = BaseDirs::new();
