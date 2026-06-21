@@ -12,17 +12,17 @@ impl SuperHidden for PathBuf {
         if cfg!(target_os = "linux") {
             Err(AreiaError::SuperHidingNotSupported(
                 "No super hiding on Linux".to_string(),
-            ))
+            ).into())
         } else {
             if !self.exists() {
-                return Err(AreiaError::SuperHidingRequiresExistingPath(self.clone()));
+                return Err(AreiaError::SuperHidingRequiresExistingPath(self.clone()).into());
             }
             if cfg!(target_os = "windows") || cfg!(target_os = "macos") {
                 utils::is_superhidden(&self)
             } else {
                 Err(AreiaError::SuperHidingNotSupported(
                     "Super hiding not supported on this OS".to_string(),
-                ))
+                ).into())
             }
         }
     }
@@ -31,10 +31,10 @@ impl SuperHidden for PathBuf {
         if cfg!(target_os = "linux") {
             Err(AreiaError::SuperHidingNotSupported(
                 "No super hiding on Linux".to_string(),
-            ))
+            ).into())
         } else {
             if !self.exists() {
-                return Err(AreiaError::SuperHidingRequiresExistingPath(self.clone()));
+                return Err(AreiaError::SuperHidingRequiresExistingPath(self.clone()).into());
             }
             if self.is_super_hidden()? {
                 return Ok(self.clone());
@@ -44,7 +44,7 @@ impl SuperHidden for PathBuf {
             } else {
                 Err(AreiaError::SuperHidingNotSupported(
                     "Super hiding not supported on this OS".to_string(),
-                ))
+                ).into())
             }
         }
     }
@@ -53,10 +53,10 @@ impl SuperHidden for PathBuf {
         if cfg!(target_os = "linux") {
             Err(AreiaError::SuperHidingNotSupported(
                 "No super hiding on Linux".to_string(),
-            ))
+            ).into())
         } else {
             if !self.exists() {
-                return Err(AreiaError::SuperHidingRequiresExistingPath(self.clone()));
+                return Err(AreiaError::SuperHidingRequiresExistingPath(self.clone()).into());
             }
             if !self.is_super_hidden()? {
                 return Ok(self.clone());
@@ -66,7 +66,7 @@ impl SuperHidden for PathBuf {
             } else {
                 Err(AreiaError::SuperHidingNotSupported(
                     "Super hiding not supported on this OS".to_string(),
-                ))
+                ).into())
             }
         }
     }

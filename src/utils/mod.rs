@@ -46,7 +46,7 @@ pub fn is_superhidden(path: &PathBuf) -> AreiaResult<bool> {
 
     Err(AreiaError::SuperHidingNotSupported(
         "Super hiding not supported on this OS".to_string(),
-    ))
+    ).into())
 }
 
 #[allow(unused_variables, unreachable_code)]
@@ -60,7 +60,7 @@ pub fn super_hide(path: &mut PathBuf) -> AreiaResult<PathBuf> {
 
     Err(AreiaError::SuperHidingNotSupported(
         "Super hiding not supported on this OS".to_string(),
-    ))
+    ).into())
 }
 
 #[allow(unused_variables, unreachable_code)]
@@ -74,26 +74,26 @@ pub fn super_unhide(path: &mut PathBuf) -> AreiaResult<PathBuf> {
 
     Err(AreiaError::SuperHidingNotSupported(
         "Super hiding not supported on this OS".to_string(),
-    ))
+    ).into())
 }
 
 pub fn create_all_dir_with_file(path: &PathBuf) -> AreiaResult<()> {
     if let Some(parent) = path.parent() {
-        std::fs::create_dir_all(parent)?;
+        std::fs::create_dir_all(parent).map_err(AreiaError::from)?;
     }
-    std::fs::File::create(path)?;
+    std::fs::File::create(path).map_err(AreiaError::from)?;
     Ok(())
 }
 
 pub fn delete_all_dir_with_files(path: &PathBuf) -> AreiaResult<()> {
     if path.is_file() {
         if let Some(parent) = path.parent() {
-            std::fs::remove_dir_all(parent)?;
+            std::fs::remove_dir_all(parent).map_err(AreiaError::from)?;
         } else {
-            std::fs::remove_file(path)?;
+            std::fs::remove_file(path).map_err(AreiaError::from)?;
         }
     } else {
-        std::fs::remove_dir_all(path)?;
+        std::fs::remove_dir_all(path).map_err(AreiaError::from)?;
     }
     Ok(())
 }

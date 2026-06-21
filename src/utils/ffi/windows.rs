@@ -166,7 +166,7 @@ pub fn hide(path: &Path) -> AreiaResult<()> {
             return Err(AreiaError::WindowsError(format!(
                 "Failed to set hidden attribute: {}",
                 err
-            )));
+            )).into());
         }
     }
 
@@ -187,7 +187,7 @@ pub fn super_hide(path: &Path) -> AreiaResult<()> {
             return Err(AreiaError::WindowsError(format!(
                 "Failed to set super hidden attributes: {}",
                 err
-            )));
+            )).into());
         }
     }
 
@@ -211,7 +211,7 @@ pub fn super_unhide(path: &Path) -> AreiaResult<()> {
             return Err(AreiaError::WindowsError(format!(
                 "Failed to remove super hidden attributes: {}",
                 err
-            )));
+            )).into());
         }
     }
 
@@ -234,7 +234,7 @@ pub fn unhide(path: &Path) -> AreiaResult<()> {
             return Err(AreiaError::WindowsError(format!(
                 "Failed to remove hidden attribute: {}",
                 err
-            )));
+            )).into());
         }
     }
 
@@ -290,7 +290,7 @@ pub fn get_path(folder: FolderID) -> AreiaResult<PathBuf> {
         Err(AreiaError::WindowsError(format!(
             "Failed to get {}. HRESULT: 0x{:x}",
             folder, result
-        )))
+        )).into())
     }
 }
 
@@ -307,7 +307,7 @@ fn wide_path(path: &Path) -> AreiaResult<(Vec<u16>, u32)> {
         let attrs = GetFileAttributesW(wide_path.as_ptr());
         if attrs == INVALID_FILE_ATTRIBUTES {
             let err = std::io::Error::last_os_error();
-            return Err(AreiaError::WindowsIoError(err));
+            return Err(AreiaError::WindowsIoError(err).into());
         }
 
         Ok((wide_path, attrs))

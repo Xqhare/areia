@@ -109,7 +109,7 @@ fn get_flags(path: &Path) -> AreiaResult<u32> {
             return Err(AreiaError::MacError(format!(
                 "Failed to stat file: {}",
                 err
-            )));
+            )).into());
         }
 
         Ok(buf.st_flags)
@@ -143,7 +143,7 @@ fn set_flag(path: &Path, flag: u32, enable: bool) -> AreiaResult<()> {
             return Err(AreiaError::MacError(format!(
                 "Failed to set hidden attribute: {}",
                 err
-            )));
+            )).into());
         }
     }
     Ok(())

@@ -28,7 +28,7 @@ impl Hidden for PathBuf {
         #[cfg(target_os = "windows")]
         return Err(AreiaError::MakingHiddenPathNotSupported(
             "Unavailable on Windows".to_string(),
-        ));
+        ).into());
         #[cfg(not(target_os = "windows"))]
         return Ok(make_hidden_path(&self));
     }
@@ -38,7 +38,7 @@ impl Hidden for PathBuf {
         #[cfg(target_os = "windows")]
         return Err(AreiaError::MakingHiddenPathNotSupported(
             "Unavailable on Windows".to_string(),
-        ));
+        ).into());
         #[cfg(not(target_os = "windows"))]
         return make_unhidden_path(&self);
     }
@@ -46,7 +46,7 @@ impl Hidden for PathBuf {
 
 fn is_path_empty(path: &PathBuf) -> AreiaResult<()> {
     if path.as_os_str().is_empty() {
-        return Err(AreiaError::PathMustBeSomething(path.clone()));
+        return Err(AreiaError::PathMustBeSomething(path.clone()).into());
     }
     Ok(())
 }

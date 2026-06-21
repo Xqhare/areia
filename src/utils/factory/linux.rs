@@ -105,7 +105,7 @@ pub fn get_usr_dirs<P: Into<PathBuf>>(home: P) -> AreiaResult<HashMap<String, Op
             out.insert("FONTS".to_owned(), font_dir(home));
             Ok(out)
         }
-        Err(err) => Err(AreiaError::IoError(err)),
+        Err(err) => Err(AreiaError::IoError(err).into()),
     }
 }
 
@@ -205,43 +205,55 @@ fn parse_xdg_dirs(bytes: Vec<u8>, home: PathBuf) -> AreiaResult<HashMap<String, 
 
 #[test]
 fn xdg_user_dir_parsing() {
-    let home = env::var_os("HOME").unwrap();
-    let home_path = PathBuf::from(home.clone());
+    let tmp_dir = env::temp_dir().join("areia_test_xdg_user_dirs");
+    let _ = std::fs::remove_dir_all(&tmp_dir);
+    std::fs::create_dir_all(tmp_dir.join(".config")).unwrap();
+    std::fs::create_dir_all(tmp_dir.join(".local/share/fonts")).unwrap();
 
-    let dirs = get_usr_dirs(home);
-    if dirs.is_err() {
-        // Home-lab does not have a `user-dirs.dirs` file
-        // So for the CI we just skip the test like this
-        return;
-    }
+    let xdg_config = r#"
+XDG_DESKTOP_DIR="$HOME/Desktop"
+XDG_DOCUMENTS_DIR="$HOME/Documents"
+XDG_DOWNLOAD_DIR="$HOME/Downloads"
+XDG_MUSIC_DIR="$HOME/Music"
+XDG_PICTURES_DIR="$HOME/Pictures"
+XDG_PUBLICSHARE_DIR="$HOME/Public"
+XDG_TEMPLATES_DIR="$HOME/Templates"
+XDG_VIDEOS_DIR="$HOME/Videos"
+"#;
+    std::fs::write(tmp_dir.join(".config/user-dirs.dirs"), xdg_config).unwrap();
+
+    let dirs = get_usr_dirs(tmp_dir.clone());
+    assert!(dirs.is_ok());
     let dirs = dirs.unwrap();
     assert_eq!(dirs.len(), 9);
 
     assert_eq!(
         dirs.get("DESKTOP").unwrap(),
-        &Some(home_path.join("Desktop"))
+        &Some(tmp_dir.join("Desktop"))
     );
     assert_eq!(
         dirs.get("DOCUMENTS").unwrap(),
-        &Some(home_path.join("Documents"))
+        &Some(tmp_dir.join("Documents"))
     );
     assert_eq!(
         dirs.get("DOWNLOADS").unwrap(),
-        &Some(home_path.join("Downloads"))
+        &Some(tmp_dir.join("Downloads"))
     );
-    assert_eq!(dirs.get("MUSIC").unwrap(), &Some(home_path.join("Music")));
+    assert_eq!(dirs.get("MUSIC").unwrap(), &Some(tmp_dir.join("Music")));
     assert_eq!(
         dirs.get("PICTURES").unwrap(),
-        &Some(home_path.join("Pictures"))
+        &Some(tmp_dir.join("Pictures"))
     );
     assert_eq!(
         dirs.get("PUBLICSHARE").unwrap(),
-        &Some(home_path.join("Public"))
+        &Some(tmp_dir.join("Public"))
     );
     assert_eq!(
         dirs.get("TEMPLATES").unwrap(),
-        &Some(home_path.join("Templates"))
+        &Some(tmp_dir.join("Templates"))
     );
-    assert_eq!(dirs.get("VIDEOS").unwrap(), &Some(home_path.join("Videos")));
-    assert!(dirs.get("FONTS").unwrap().is_some());
+    assert_eq!(dirs.get("VIDEOS").unwrap(), &Some(tmp_dir.join("Videos")));
+    assert_eq!(dirs.get("FONTS").unwrap(), &Some(tmp_dir.join(".local/share/fonts")));
+
+    let _ = std::fs::remove_dir_all(&tmp_dir);
 }

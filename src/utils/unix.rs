@@ -34,7 +34,7 @@ pub fn get_home() -> AreiaResult<std::path::PathBuf> {
             return Ok(path);
         }
 
-        Err(AreiaError::CantGetHomeDir)
+        Err(AreiaError::CantGetHomeDir.into())
     }
 }
 
@@ -141,7 +141,7 @@ pub fn unhide_file(path: &PathBuf) -> AreiaResult<PathBuf> {
 
         for dir in system_dirs {
             if path.starts_with(dir) {
-                return Err(AreiaError::HiddenFileInsideSystemDir(path.clone()));
+                return Err(AreiaError::HiddenFileInsideSystemDir(path.clone()).into());
             }
         }
     }
@@ -172,6 +172,6 @@ pub fn unhide_file(path: &PathBuf) -> AreiaResult<PathBuf> {
 
 // I suspect this wont work as I expect it to - especially with several nested dirs
 fn atomic_move(from: &PathBuf, to: &PathBuf) -> AreiaResult<()> {
-    std::fs::rename(from, to)?;
+    std::fs::rename(from, to).map_err(AreiaError::from)?;
     Ok(())
 }

@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-pub type AreiaResult<T> = Result<T, AreiaError>;
+pub type AreiaResult<T> = Result<T, nemesis::NemesisError>;
 
 type WinErrString = String;
 type MacErrString = String;
@@ -62,5 +62,20 @@ impl std::fmt::Display for AreiaError {
                 write!(f, "Hidden file inside system directory: {:?}", path)
             }
         }
+    }
+}
+
+impl std::error::Error for AreiaError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            AreiaError::IoError(err) | AreiaError::WindowsIoError(err) => Some(err),
+            _ => None,
+        }
+    }
+}
+
+impl From<AreiaError> for nemesis::NemesisError {
+    fn from(err: AreiaError) -> Self {
+        nemesis::NemesisError::new("Areia", err)
     }
 }
