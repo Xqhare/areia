@@ -5,7 +5,7 @@
         - [ ] System Drive :: (No FolderID, always parent of Program Data)
         - [ ] Fonts :: (inside `UserDirs` - even though on Windows its system level, unifies my API nicely) (FolderID: {FD228CB7-AE11-4AE3-864C-16F3910AB8FE})
     - [ ] Unix ::
-    	- [ ] Root :: (System Drive equivalent)
+        - [ ] Root :: (System Drive equivalent)
         - [ ] Root Bin :: (Program Files equivalent)
         - [ ] Root Data :: (Program Data equivalent)
         - [ ] Root Config :: (No equivalent)
