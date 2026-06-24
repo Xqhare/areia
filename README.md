@@ -23,19 +23,11 @@ The crate is tested on Linux. It builds on Windows and macOS (on GitHub Actions)
 
 ## Roadmap
 
-- [ ] Support system level directories
-    - [ ] Windows
-        - [ ] Program Files (x86) (FolderID: {7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}) (not x64: x86 has the same expected output on 64bit machines, if the app is 32 or 64 bit.)
-        - [ ] Program Data (FolderID: {62AB5D82-FDC1-4DC3-A9DD-070D1D495D97})
-        - [ ] System Drive (No FolderID, always parent of Program Data)
-        - [ ] Fonts (inside `UserDirs` - even though on Windows its system level, unifies my API nicely) (FolderID: {FD228CB7-AE11-4AE3-864C-16F3910AB8FE})
-    - [ ] Unix
-    	- [ ] Root (System Drive equivalent)
-        - [ ] Root Bin (Program Files equivalent)
-        - [ ] Root Data (Program Data equivalent)
-        - [ ] Root Config (No equivalent)
-- [ ] Nice-to-Haves
-    - [ ] Implement `ProjectDirs` as in the directories crate (for full feature parity)
+`Areia` uses my [nomos](https://github.com/xqhare/nomos) project management system.
+
+The roadmap for this project can be found in the [nomos.md](nomos.md) file.
+
+All nomos files follow the syntax defined [here](https://github.com/Xqhare/nomos/blob/master/spec/).
 
 ## Motivation
 
