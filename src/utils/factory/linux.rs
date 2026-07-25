@@ -227,10 +227,7 @@ XDG_VIDEOS_DIR="$HOME/Videos"
     let dirs = dirs.unwrap();
     assert_eq!(dirs.len(), 9);
 
-    assert_eq!(
-        dirs.get("DESKTOP").unwrap(),
-        &Some(tmp_dir.join("Desktop"))
-    );
+    assert_eq!(dirs.get("DESKTOP").unwrap(), &Some(tmp_dir.join("Desktop")));
     assert_eq!(
         dirs.get("DOCUMENTS").unwrap(),
         &Some(tmp_dir.join("Documents"))
@@ -253,7 +250,10 @@ XDG_VIDEOS_DIR="$HOME/Videos"
         &Some(tmp_dir.join("Templates"))
     );
     assert_eq!(dirs.get("VIDEOS").unwrap(), &Some(tmp_dir.join("Videos")));
-    assert_eq!(dirs.get("FONTS").unwrap(), &Some(tmp_dir.join(".local/share/fonts")));
+    assert_eq!(
+        dirs.get("FONTS").unwrap(),
+        &Some(tmp_dir.join(".local/share/fonts"))
+    );
 
     let _ = std::fs::remove_dir_all(&tmp_dir);
 }
