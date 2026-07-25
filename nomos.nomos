@@ -11,3 +11,4 @@
         - [ ] Root Config :: (No equivalent)
 - [ ] Nice-to-Haves :: 
     - [ ] Implement `ProjectDirs` :: as in the directories crate (for full feature parity)
+        * From the arch wiki: `XDG_PROJECTS_DIR="$HOME/Projects"` inside `~/.config/user-dirs.dirs`
